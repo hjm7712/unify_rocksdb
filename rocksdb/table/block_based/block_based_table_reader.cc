@@ -79,8 +79,6 @@ std::atomic<int> INDEX_HIT_COUNT, INDEX_MISS_COUNT;
 std::atomic<int> DATA_HIT_COUNT, DATA_MISS_COUNT;
 extern unsigned long long FILTER[64], INDEX[64], DATA[64];
 extern int NUM_THREADS;
-extern char *index_contents;
-int UNIFY = 0;
 
 namespace ROCKSDB_NAMESPACE {
 
@@ -1200,8 +1198,7 @@ Status BlockBasedTable::GetDataBlockFromCache(
       rep_->table_options.cache_index_and_filter_blocks_with_high_priority &&
               (block_type == BlockType::kFilter ||
                block_type == BlockType::kCompressionDictionary ||
-               block_type == BlockType::kIndex ||
-			   block_type == BlockType::kUnify)	// BIG SSD
+               block_type == BlockType::kIndex)
           ? Cache::Priority::HIGH
           : Cache::Priority::LOW;
 
@@ -1330,8 +1327,7 @@ Status BlockBasedTable::PutDataBlockToCache(
       rep_->table_options.cache_index_and_filter_blocks_with_high_priority &&
               (block_type == BlockType::kFilter ||
                block_type == BlockType::kCompressionDictionary ||
-               block_type == BlockType::kIndex ||
-			   block_type == BlockType::kUnify)	// BIG SSD
+               block_type == BlockType::kIndex)
           ? Cache::Priority::HIGH
           : Cache::Priority::LOW;
   assert(cached_block);
@@ -1398,6 +1394,7 @@ Status BlockBasedTable::PutDataBlockToCache(
   // insert into uncompressed block cache
   if (block_cache != nullptr && block_holder->own_bytes()) {
     size_t charge = block_holder->ApproximateMemoryUsage();
+	printf("charge %lu\n", charge);
     Cache::Handle* cache_handle = nullptr;
     s = InsertEntryToCache(
         rep_->ioptions.lowest_used_cache_tier, block_cache, cache_key,
@@ -1498,7 +1495,7 @@ template <typename TBlocklike>
 Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
     FilePrefetchBuffer* prefetch_buffer, const ReadOptions& ro,
     const BlockHandle& handle, const UncompressionDict& uncompression_dict,
-    const bool wait, const bool for_compaction,
+    const bool /*wait*/, const bool for_compaction,
     CachableEntry<TBlocklike>* block_entry, BlockType block_type,
     GetContext* get_context, BlockCacheLookupContext* lookup_context,
     BlockContents* contents) const {
@@ -1518,16 +1515,23 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
 
   if (block_cache != nullptr || block_cache_compressed != nullptr) {
     // create key for block cache
-    key_data = GetCacheKey(rep_->base_cache_key, handle);
-    key = key_data.AsSlice();
+//	  if(block_type == BlockType::kIndex){
+//		  key_data = (rep_->base_cache_key).WithOffset(handle.offset() >> 3);
+//		  key = key_data.AsSlice();
+//	  }
+//	  else{
+		  key_data = GetCacheKey(rep_->base_cache_key, handle);
+		  key = key_data.AsSlice();
+//	  }
 
-    if (!contents) {
+/*    if (!contents) {
       s = GetDataBlockFromCache(key, block_cache, block_cache_compressed, ro,
                                 block_entry, uncompression_dict, block_type,
                                 wait, get_context);
       // Value could still be null at this point, so check the cache handle
       // and update the read pattern for prefetching
       if (block_entry->GetValue() || block_entry->GetCacheHandle()) {
+		  printf("get from cache %d\n", (int)block_type);
         // TODO(haoyu): Differentiate cache hit on uncompressed block cache and
         // compressed block cache.
         is_cache_hit = true;
@@ -1545,11 +1549,11 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
           // prefetching. It should also take in account blocks read from cache.
           prefetch_buffer->UpdateReadPattern(
               handle.offset(), BlockSizeWithTrailer(handle),
-              ro.adaptive_readahead /*decrease_readahead_size*/);
+              ro.adaptive_readahead *//*decrease_readahead_size*//*);
         }
       }
-    }
-
+	}
+*/
     // Can't find the block from the cache. If I/O is allowed, read from the
     // file.
     if (block_entry->GetValue() == nullptr &&
@@ -1572,12 +1576,7 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
       CompressionType raw_block_comp_type;
       BlockContents raw_block_contents;
 
-	  if(UNIFY == 1 && block_type != BlockType::kIndex){
-		  free(index_contents);
-		  UNIFY = 0;
-	  }
-
-	  if (!contents && UNIFY == 1 && block_type == BlockType::kIndex){
+/*	  if (!contents && block_type == BlockType::kIndex){
 		  BlockFetcher block_fetcher(
 				  rep_->file.get(), prefetch_buffer, rep_->footer, ro, handle,
 				  &raw_block_contents, rep_->ioptions, do_uncompress,
@@ -1589,10 +1588,8 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
 		  raw_block_comp_type = block_fetcher.get_compression_type();
 		  contents = &raw_block_contents;
 
-		  free(index_contents);
-		  UNIFY = 0;
 	  }
-	  else if (!contents) {
+	  else*/ if (!contents) {
         Histograms histogram = for_compaction ? READ_BLOCK_COMPACTION_MICROS
                                               : READ_BLOCK_GET_MICROS;
         StopWatch sw(rep_->ioptions.clock, statistics, histogram);
@@ -2006,13 +2003,13 @@ Status BlockBasedTable::RetrieveBlock(
   assert(block_entry);
   assert(block_entry->IsEmpty());
 
+//  printf("read trigger %d\n", (int)block_type);
   Status s;
   if (use_cache) {
     s = MaybeReadBlockAndLoadToCache(
         prefetch_buffer, ro, handle, uncompression_dict, wait_for_cache,
         for_compaction, block_entry, block_type, get_context, lookup_context,
         /*contents=*/nullptr);
-
     if (!s.ok()) {
       return s;
     }
@@ -2034,7 +2031,6 @@ Status BlockBasedTable::RetrieveBlock(
   const bool maybe_compressed =
       block_type != BlockType::kFilter &&
       block_type != BlockType::kCompressionDictionary &&
-	  block_type != BlockType::kUnify &&		// BIG SD
       rep_->blocks_maybe_compressed;
   const bool do_uncompress = maybe_compressed;
   std::unique_ptr<TBlocklike> block;
@@ -2426,10 +2422,6 @@ Status BlockBasedTable::Get(const ReadOptions& read_options, const Slice& key,
   
   TEST_SYNC_POINT("BlockBasedTable::Get:AfterFilterMatch");
   if (!may_match) {
-	if(UNIFY == 1){
-		free(index_contents);
-		UNIFY = 0;
-	}
     RecordTick(rep_->ioptions.stats, BLOOM_FILTER_USEFUL);
     PERF_COUNTER_BY_LEVEL_ADD(bloom_filter_useful, 1, rep_->level);
   } else {
@@ -2442,6 +2434,7 @@ Status BlockBasedTable::Get(const ReadOptions& read_options, const Slice& key,
     }
 
 	INDEX[gettid()%NUM_THREADS]=1;
+	printf("before index read\n");
     auto iiter =
         NewIndexIterator(read_options, need_upper_bound_check, &iiter_on_stack,
                          get_context, &lookup_context);

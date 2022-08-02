@@ -163,6 +163,7 @@ void PartitionedFilterBlockBuilder::MaybeCutAFilterBlock_Unify(
     filter_construction_status = filter_bits_builder_->MaybePostVerify(filter);
   }
   std::string& index_key = p_index_builder_->GetPartitionKey();
+  printf("FILTER PUSH %s\n", index_key.c_str());
   filters.push_back({index_key, std::move(filter_data), filter});
   if (!filter_construction_status.ok() &&
       partitioned_filters_construction_status_.ok()) {
@@ -205,6 +206,7 @@ Slice PartitionedFilterBlockBuilder::Finish(
         last_partition_block_handle.size() - last_encoded_handle_.size());
     last_encoded_handle_ = last_partition_block_handle;
     const Slice handle_delta_encoding_slice(handle_delta_encoding);
+	printf("FILTER\t\t%s\n", last_filter_entry_key.c_str());
     index_on_filter_block_builder_.Add(last_filter_entry_key, handle_encoding,
                                        &handle_delta_encoding_slice);
     if (!p_index_builder_->seperator_is_key_plus_seq()) {
@@ -245,6 +247,7 @@ Slice PartitionedFilterBlockBuilder::Finish(
     finishing_filters = true;
 
     last_filter_entry_key = filters.front().key;
+
     Slice filter = filters.front().filter;
     last_filter_data = std::move(filters.front().filter_data);
     if (filter_data != nullptr) {
@@ -396,7 +399,7 @@ Status PartitionedFilterBlockReader::GetFilterPartitionBlock(
   const Status s =
       table()->RetrieveBlock(prefetch_buffer, read_options, fltr_blk_handle,
                              UncompressionDict::GetEmptyDict(), filter_block,
-                             BlockType::kUnify, get_context, lookup_context,
+                             BlockType::kFilter, get_context, lookup_context,
                              /* for_compaction */ false, /* use_cache */ true,
                              /* wait_for_cache */ true);
 /*
@@ -424,6 +427,7 @@ bool PartitionedFilterBlockReader::MayMatch(
     return true;
   }
 
+//	  printf("filter %p size %ld\n", filter_block.GetValue(), filter_block.GetValue()->size());
 //  if(gettid()%NUM_THREADS==0){
 //	  printf("filter %p size %ld\n", filter_block.GetValue(), filter_block.GetValue()->size());
 //  }

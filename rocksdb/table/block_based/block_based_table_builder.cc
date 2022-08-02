@@ -1046,7 +1046,7 @@ void BlockBasedTableBuilder::Add_Unify(const Slice& key, const Slice& value) {
 	// BIG SSD
 	// If unify block is filled, flush data block whether it is not filled
 	bool unify_filled = r->index_builder->CheckUnifyCut();
-	if(unify_filled == true){
+/*	if(unify_filled == true){
 	  assert(!r->data_block.empty());
       r->first_key_in_next_block = &key;
       Flush();
@@ -1059,9 +1059,9 @@ void BlockBasedTableBuilder::Add_Unify(const Slice& key, const Slice& value) {
 		  }
 	  }
 	}
-	else{
+	else{*/
 		auto should_flush = r->flush_block_policy->Update(key, value);
-		if (should_flush) {
+		if (should_flush || unify_filled) {
 			assert(!r->data_block.empty());
 			r->first_key_in_next_block = &key;
 			Flush();
@@ -1098,12 +1098,12 @@ void BlockBasedTableBuilder::Add_Unify(const Slice& key, const Slice& value) {
 				if (r->IsParallelCompressionEnabled()) {
 					r->pc_rep->curr_block_keys->Clear();
 				} else {
-					r->index_builder->AddIndexEntry(&r->last_key, &key,
+					r->index_builder->AddIndexEntry_Unify(&r->last_key, &key,
 							r->pending_handle);
 				}
 			}
 		}
-	}
+//	}
 
 	cur_index_size = r->index_builder->CalculateSize();
 
@@ -1497,6 +1497,7 @@ void BlockBasedTableBuilder::WriteRawBlock_Unify(const Slice& unify_contents,
   assert(io_status().ok());
 
   // filter block + index block + filter_size block
+  // top level: filter block + filter_size block
   {
     IOStatus io_s = r->file->Append(unify_contents);
     if (!io_s.ok()) {
@@ -1838,11 +1839,9 @@ void BlockBasedTableBuilder::WriteFilterBlock(
 
 // BIG SSD
 void BlockBasedTableBuilder::WriteUnifyBlock(
-    MetaIndexBuilder* meta_index_builder) {
-
+    MetaIndexBuilder* meta_index_builder, BlockHandle* unify_block_handle) {
 	// This function is not for filter
 	// Think filter as unify block (filter + index)
-  BlockHandle filter_block_handle;
   IndexBuilder::IndexBlocks index_blocks;
   bool empty_filter_block =
       (rep_->filter_builder == nullptr || rep_->filter_builder->IsEmpty());
@@ -1862,7 +1861,7 @@ void BlockBasedTableBuilder::WriteUnifyBlock(
       // subtypes.
       std::unique_ptr<const char[]> filter_data;
       Slice filter_content =
-          rep_->filter_builder->Finish(filter_block_handle, &s, &filter_data);
+          rep_->filter_builder->Finish(*unify_block_handle, &s, &filter_data);
 
       assert(s.ok() || s.IsIncomplete() || s.IsCorruption());
       if (s.IsCorruption()) {
@@ -1883,25 +1882,36 @@ void BlockBasedTableBuilder::WriteUnifyBlock(
         top_level_filter_block = true;
       }
 
-	  if(top_level_filter_block == true){
-		  WriteRawBlock(filter_content, kNoCompression, &filter_block_handle,
-				  BlockType::kFilter, nullptr /*raw_contents*/,
-				  top_level_filter_block);
-	  }
-	  else{
+//	  if(top_level_filter_block == true){
+//		  std::string s_filter_content(filter_content.data(), filter_content.size());
+		  
+//		  std::array<char, sizeof(uint64_t)> filter_size;
+//		  EncodeFixed64(filter_size.data(), filter_content.size());
+//		  std::string s_filter_size(filter_size.data(), filter_size.size());
+
+//		  std::string s_unify_content = s_filter_content + s_filter_size;	// top level (no index)
+//		  Slice unify_content(s_unify_content.c_str(), s_unify_content.length());
+		 
+//		  WriteRawBlock_Unify(unify_content, filter_content,
+//				  kNoCompression, unify_block_handle,
+//				  BlockType::kUnify, nullptr /*raw_contents*/,
+//				  top_level_filter_block);
+
+//		  WriteRawBlock(filter_content, kNoCompression, unify_block_handle,
+//				  BlockType::kUnify, nullptr /*raw_contents*/,
+//				  top_level_filter_block);
+//	  }
+//	  else{
 //		  unsigned long long start, end_1, end_2, lo, hi;
 //		  asm volatile("rdtsc" : "=a" (lo), "=d" (hi));
 //		  start = ((unsigned long long)hi << 32) | lo;
 
 		  Slice index_content = rep_->index_builder->Finish_Unify(&index_blocks, order++);
-		  
 //		  asm volatile("rdtsc" : "=a" (lo), "=d" (hi));
 //		  end_1 = ((unsigned long long)hi << 32) | lo;
 
 		  std::string s_filter_content(filter_content.data(), filter_content.size());
 		  std::string s_index_content(index_content.data(), index_content.size());
-//		  std::string s_unify_content = s_filter_content + s_index_content;
-//		  Slice unify_content(s_unify_content.c_str(), s_unify_content.length());
 
 		  std::array<char, sizeof(uint64_t)> filter_size;
 		  EncodeFixed64(filter_size.data(), filter_content.size());
@@ -1919,10 +1929,10 @@ void BlockBasedTableBuilder::WriteUnifyBlock(
 //		  printf("unify %ld\n", unify_content.size());
 
 		  WriteRawBlock_Unify(unify_content, filter_content,
-				  kNoCompression, &filter_block_handle,
+				  kNoCompression, unify_block_handle,
 				  BlockType::kUnify, nullptr /*raw_contents*/,
 				  top_level_filter_block);
-	  }
+//	  }
     }
     rep_->filter_builder->ResetFilterBitsBuilder();
   }
@@ -1938,7 +1948,7 @@ void BlockBasedTableBuilder::WriteUnifyBlock(
                 : BlockBasedTable::kFullFilterBlockPrefix;
     }
     key.append(rep_->table_options.filter_policy->CompatibilityName());
-    meta_index_builder->Add(key, filter_block_handle);
+    meta_index_builder->Add(key, *unify_block_handle);
   }
 }
 
@@ -1969,7 +1979,13 @@ void BlockBasedTableBuilder::WriteIndexBlock(
   }
   if (ok()) {
     if (rep_->table_options.enable_index_compression) {
-      WriteBlock(index_blocks.index_block_contents, index_block_handle,
+//		size_t index_size = index_blocks.index_block_contents.size();
+//		printf("index_size %lu\n", index_size);
+//		for(size_t i=index_size-1; i>=index_size-10; i--){
+//			printf("%d ", (index_blocks.index_block_contents).data()[i]);
+//		}
+//		printf("\n");
+	  WriteBlock(index_blocks.index_block_contents, index_block_handle,
                  BlockType::kIndex);
     } else {
       WriteRawBlock(index_blocks.index_block_contents, kNoCompression,
@@ -1994,6 +2010,12 @@ void BlockBasedTableBuilder::WriteIndexBlock(
       }
 
       if (rep_->table_options.enable_index_compression) {
+//		  size_t index_size = index_blocks.index_block_contents.size();
+//		  printf("index_size %lu\n", index_size);
+//		  for(size_t i=index_size-1; i>=index_size-10; i--){
+//			  printf("%d ", (index_blocks.index_block_contents).data()[i]);
+//		  }
+//		  printf("\n");
         WriteBlock(index_blocks.index_block_contents, index_block_handle,
                    BlockType::kIndex);
       } else {
@@ -2403,10 +2425,15 @@ Status BlockBasedTableBuilder::Finish_Unify() {
   //    6. [metaindex block]
   //    7. Footer
   BlockHandle metaindex_block_handle, index_block_handle;
+  BlockHandle unify_block_handle;
   MetaIndexBuilder meta_index_builder;
 //  WriteFilterBlock(&meta_index_builder);
-  WriteUnifyBlock(&meta_index_builder);
+//  printf("Unify start\n");
+  WriteUnifyBlock(&meta_index_builder, &unify_block_handle);
+//  printf("Unify end\n");
+//  printf("Index start\n");
   WriteIndexBlock(&meta_index_builder, &index_block_handle);
+//  printf("Index end\n");
   WriteCompressionDictBlock(&meta_index_builder);
   WriteRangeDelBlock(&meta_index_builder);
   WritePropertiesBlock(&meta_index_builder);

@@ -720,6 +720,7 @@ void CompactionJob::GenSubcompactionBoundaries() {
 }
 
 Status CompactionJob::Run() {
+	printf("Compaction start\n");
   AutoThreadOperationStageUpdater stage_updater(
       ThreadStatus::STAGE_COMPACTION_RUN);
   TEST_SYNC_POINT("CompactionJob::Run():Start");
@@ -733,6 +734,7 @@ Status CompactionJob::Run() {
   // Launch a thread for each of subcompactions 1...num_threads-1
   std::vector<port::Thread> thread_pool;
   thread_pool.reserve(num_threads - 1);
+  // BIG SSD
   for (size_t i = 1; i < compact_->sub_compact_states.size(); i++) {
     thread_pool.emplace_back(/*&CompactionJob::ProcessKeyValueCompaction*/ 
 							 &CompactionJob::ProcessKeyValueCompaction_Unify, this,
@@ -908,6 +910,8 @@ Status CompactionJob::Run() {
   TEST_SYNC_POINT("CompactionJob::Run():End");
 
   compact_->status = status;
+
+  printf("Compaction END\n");
   return status;
 }
 
@@ -2321,6 +2325,7 @@ Status CompactionJob::FinishCompactionOutputFile(
       assert(lower_bound == nullptr ||
              ucmp->Compare(*lower_bound, kv.second) < 0);
       // Range tombstone is not supported by output validator yet.
+	  // BIG SSD TEMP
       sub_compact->builder->Add(kv.first.Encode(), kv.second);
       InternalKey smallest_candidate = std::move(kv.first);
       if (lower_bound != nullptr &&
@@ -2896,10 +2901,13 @@ Status CompactionJob::InstallCompactionResults(
   }
 
   VersionEdit* const edit = compaction->edit();
+
   assert(edit);
+
 
   // Add compaction inputs
   compaction->AddInputDeletions(edit);
+
 
   std::unordered_map<uint64_t, BlobGarbageMeter::BlobStats> blob_total_garbage;
 
@@ -2928,6 +2936,7 @@ Status CompactionJob::InstallCompactionResults(
     }
   }
 
+
   for (const auto& pair : blob_total_garbage) {
     const uint64_t blob_file_number = pair.first;
     const BlobGarbageMeter::BlobStats& stats = pair.second;
@@ -2936,9 +2945,12 @@ Status CompactionJob::InstallCompactionResults(
                              stats.GetBytes());
   }
 
+
   return versions_->LogAndApply(compaction->column_family_data(),
                                 mutable_cf_options, edit, db_mutex_,
                                 db_directory_);
+
+
 }
 
 void CompactionJob::RecordCompactionIOStats() {
@@ -3319,8 +3331,7 @@ Status CompactionServiceCompactionJob::Run() {
   assert(compact_->sub_compact_states.size() == 1);
   SubcompactionState* sub_compact = compact_->sub_compact_states.data();
 
-  /*ProcessKeyValueCompaction(sub_compact);*/
-  ProcessKeyValueCompaction_Unify(sub_compact);
+  ProcessKeyValueCompaction(sub_compact);
 
   compaction_stats_.micros = db_options_.clock->NowMicros() - start_micros;
   compaction_stats_.cpu_micros = sub_compact->compaction_job_stats.cpu_micros;

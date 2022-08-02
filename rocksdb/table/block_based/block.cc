@@ -593,7 +593,6 @@ bool BlockIter<TValue>::ParseNextKey(bool* is_shared) {
   uint32_t shared, non_shared, value_length;
   p = DecodeEntryFunc()(p, limit, &shared, &non_shared, &value_length);
   if (p == nullptr || raw_key_.Size() < shared) {
-    printf("aaaaaaaaaa\n");
 	  CorruptionError();
     return false;
   } else {
@@ -775,8 +774,6 @@ bool BlockIter<TValue>::BinarySeek(const Slice& target, uint32_t* index,
     const char* key_ptr = DecodeKeyFunc()(
         data_ + region_offset, data_ + restarts_, &shared, &non_shared);
     if (key_ptr == nullptr || (shared != 0)) {
-      
-		printf("bbbbbbbbbbbbbb\n");
 		CorruptionError();
       return false;
     }

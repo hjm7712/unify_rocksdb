@@ -211,7 +211,8 @@ Status BuildTable(
       if (!s.ok()) {
         break;
       }
-      builder->Add(key, value);
+	  // BIG SSD TEMP
+      builder->Add_Unify(key, value);
 
       s = meta->UpdateBoundaries(key, value, ikey.sequence, ikey.type);
       if (!s.ok()) {
@@ -237,6 +238,7 @@ Status BuildTable(
            range_del_it->Next()) {
         auto tombstone = range_del_it->Tombstone();
         auto kv = tombstone.Serialize();
+		// BIG SSD TEMP
         builder->Add(kv.first.Encode(), kv.second);
         meta->UpdateBoundariesForRange(kv.first, tombstone.SerializeEndKey(),
                                        tombstone.seq_,
@@ -253,7 +255,8 @@ Status BuildTable(
     if (!s.ok() || empty) {
       builder->Abandon();
     } else {
-      s = builder->Finish();
+		// BIG SSD TEMP
+      s = builder->Finish_Unify();
     }
     if (io_status->ok()) {
       *io_status = builder->io_status();
@@ -325,6 +328,7 @@ Status BuildTable(
 
     TEST_SYNC_POINT("BuildTable:BeforeOutputValidation");
     if (s.ok() && !empty) {
+	printf("k\n");
       // Verify that the table is usable
       // We set for_compaction to false and don't OptimizeForCompactionTableRead
       // here because this is a special case after we finish the table building
@@ -345,6 +349,7 @@ Status BuildTable(
           /*largest_compaction_key*/ nullptr,
           /*allow_unprepared_value*/ false));
       s = it->status();
+	printf("l\n");
       if (s.ok() && paranoid_file_checks) {
         OutputValidator file_validator(tboptions.internal_comparator,
                                        /*enable_order_check=*/true,

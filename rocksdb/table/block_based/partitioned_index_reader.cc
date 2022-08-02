@@ -61,6 +61,7 @@ InternalIteratorBase<IndexValue>* PartitionIndexReader::NewIterator(
     return NewErrorInternalIterator<IndexValue>(s);
   }
 
+//	  printf("index %p %ld\n",index_block.GetValue(), index_block.GetValue()->size());
 //  if(gettid()%NUM_THREADS==0){
 //	  printf("index %p %ld\n",index_block.GetValue(), index_block.GetValue()->size());
 //  }

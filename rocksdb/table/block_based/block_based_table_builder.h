@@ -152,7 +152,8 @@ class BlockBasedTableBuilder : public TableBuilder {
 
   void WriteFilterBlock(MetaIndexBuilder* meta_index_builder);
   // BIG SSD
-  void WriteUnifyBlock(MetaIndexBuilder* meta_index_builder);
+  void WriteUnifyBlock(MetaIndexBuilder* meta_index_builder, 
+			 		   BlockHandle* unify_block_handle);
   void WriteIndexBlock(MetaIndexBuilder* meta_index_builder,
                        BlockHandle* index_block_handle);
   void WritePropertiesBlock(MetaIndexBuilder* meta_index_builder);

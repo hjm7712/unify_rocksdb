@@ -8,10 +8,11 @@
 // found in the LICENSE file. See the AUTHORS file for names of contributors.
 #include "table/block_based/partitioned_index_iterator.h"
 
-extern int UNIFY;
-
 namespace ROCKSDB_NAMESPACE {
-void PartitionedIndexIterator::Seek(const Slice& target) { SeekImpl(&target); }
+void PartitionedIndexIterator::Seek(const Slice& target) { 
+	printf("hi\n");
+	SeekImpl(&target); 
+}
 
 void PartitionedIndexIterator::SeekToFirst() { SeekImpl(nullptr); }
 
@@ -30,7 +31,6 @@ void PartitionedIndexIterator::SeekImpl(const Slice* target) {
   }
 
   InitPartitionedIndexBlock();
-
   if (target) {
     block_iter_.Seek(*target);
   } else {
@@ -95,7 +95,7 @@ void PartitionedIndexIterator::InitPartitionedIndexBlock() {
         rep, partitioned_index_handle, read_options_.readahead_size,
         is_for_compaction, read_options_.async_io);
     Status s;
-	
+
 	table_->NewDataBlockIterator<IndexBlockIter>(
 			read_options_, partitioned_index_handle, &block_iter_,
 			BlockType::kIndex,

@@ -215,40 +215,74 @@ inline void BlockFetcher::GetBlockContents() {
     // the slice content is not the buffer provided
     *contents_ = BlockContents(Slice(slice_.data(), block_size_));
   } else {
-    // page can be either uncompressed or compressed, the buffer either stack
-    // or heap provided. Refer to https://github.com/facebook/rocksdb/pull/4096
-    if (got_from_prefetch_buffer_ || used_buf_ == &stack_buf_[0]) {
-      CopyBufferToHeapBuf();
-    } else if (used_buf_ == compressed_buf_.get()) {
-      if (compression_type_ == kNoCompression &&
-          memory_allocator_ != memory_allocator_compressed_) {
-        CopyBufferToHeapBuf();
-      } else {
-        heap_buf_ = std::move(compressed_buf_);
-      }
-    } else if (direct_io_buf_.get() != nullptr) {
-      if (compression_type_ == kNoCompression) {
-        CopyBufferToHeapBuf();
-      } else {
-        CopyBufferToCompressedBuf();
-        heap_buf_ = std::move(compressed_buf_);
-      }
-    }
 	// BIG SSD
-	if(block_type_ == BlockType::kUnify){
+	int check = 0;
+	if(block_type_ == BlockType::kFilter){
 		char tmp_buf[8];
-		memcpy(tmp_buf, &heap_buf_.get()[block_size_-sizeof(uint64_t)], sizeof(uint64_t));
-		uint64_t filter_size = DecodeFixed64(tmp_buf);
-
-		// save index block part
-		index_size = block_size_ - filter_size - sizeof(uint64_t);
-		index_contents = new char[index_size];
-		memcpy(index_contents, &heap_buf_.get()[filter_size], index_size);
-		UNIFY = 1;
-
-		*contents_ = BlockContents(std::move(heap_buf_), filter_size);
+	  	memcpy(tmp_buf, &used_buf_[block_size_-sizeof(uint64_t)], sizeof(uint64_t));
+  		uint64_t filter_size = DecodeFixed64(tmp_buf);
+		size_t index_size = block_size_ - filter_size - sizeof(uint64_t);
+		printf("Filter block size %lu filter size %lu index size %lu\n", block_size_, filter_size, index_size);
+		if(block_size_ == filter_size + index_size + sizeof(uint64_t) && filter_size < block_size_ && index_size < block_size_){
+//			printf("block size %lu filter size %lu\n", block_size_, filter_size);
+			heap_buf_ = AllocateBlock(filter_size, memory_allocator_);
+			memcpy(heap_buf_.get(), used_buf_, filter_size);
+#ifndef NDEBUG
+			num_heap_buf_memcpy_++;
+#endif
+			// save index block part
+			//		index_size = block_size_ - filter_size - sizeof(uint64_t);
+			//		index_contents = new char[index_size];
+			//		memcpy(index_contents, &heap_buf_.get()[filter_size], index_size);
+			//		UNIFY = 1;
+			*contents_ = BlockContents(std::move(heap_buf_), filter_size);
+			check = 1;
+		}
 	}
-	else{
+	else if(block_type_ == BlockType::kIndex){
+		char tmp_buf[8];
+		memcpy(tmp_buf, &used_buf_[block_size_-sizeof(uint64_t)], sizeof(uint64_t));
+		uint64_t filter_size = DecodeFixed64(tmp_buf);
+		size_t index_size = block_size_ - filter_size - sizeof(uint64_t);
+		printf("Index block size %lu filter size %lu index size %lu\n", block_size_, filter_size, index_size);
+		if(block_size_ == filter_size + index_size + sizeof(uint64_t) && filter_size < block_size_ && index_size < block_size_){
+//			printf("block size %lu filter size %lu index read %lu\n", block_size_, filter_size, index_size);
+			if(index_size == 0){	// need top level
+				heap_buf_ = AllocateBlock(filter_size, memory_allocator_);
+				memcpy(heap_buf_.get(), used_buf_, filter_size);
+			}
+			else{
+				heap_buf_ = AllocateBlock(index_size, memory_allocator_);
+				memcpy(heap_buf_.get(), &used_buf_[filter_size], index_size);
+			}
+#ifndef NDEBUG
+			num_heap_buf_memcpy_++;
+#endif
+			*contents_ = BlockContents(std::move(heap_buf_), index_size > 0 ? index_size : filter_size);
+			check = 1;
+		}
+	}
+	if(check == 0) {
+		printf("Read Other block %d %lu\n", (int)block_type_, block_size_);
+		// page can be either uncompressed or compressed, the buffer either stack
+		// or heap provided. Refer to https://github.com/facebook/rocksdb/pull/4096
+		if (got_from_prefetch_buffer_ || used_buf_ == &stack_buf_[0]) {
+			CopyBufferToHeapBuf();
+		} else if (used_buf_ == compressed_buf_.get()) {
+			if (compression_type_ == kNoCompression &&
+					memory_allocator_ != memory_allocator_compressed_) {
+				CopyBufferToHeapBuf();
+			} else {
+				heap_buf_ = std::move(compressed_buf_);
+			}
+		} else if (direct_io_buf_.get() != nullptr) {
+			if (compression_type_ == kNoCompression) {
+				CopyBufferToHeapBuf();
+			} else {
+				CopyBufferToCompressedBuf();
+				heap_buf_ = std::move(compressed_buf_);
+			}
+		}
 		*contents_ = BlockContents(std::move(heap_buf_), block_size_);
 	}
   }
@@ -363,7 +397,7 @@ IOStatus BlockFetcher::ReadBlockContents() {
 
 // BIG SSD
 IOStatus BlockFetcher::ReadBlockContents_Unify() {
-    
+/*    
   compression_type_ = kNoCompression;
 
   heap_buf_ = AllocateBlock(index_size, memory_allocator_);
@@ -375,7 +409,7 @@ IOStatus BlockFetcher::ReadBlockContents_Unify() {
 #ifndef NDEBUG
   contents_->is_raw_block = true;
 #endif
-
+*/
 //  GetBlockContents();
 
 //  InsertUncompressedBlockToPersistentCacheIfNeeded();

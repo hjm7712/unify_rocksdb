@@ -55,7 +55,6 @@ TBlockIter* BlockBasedTable::NewDataBlockIterator(
   s = RetrieveBlock(prefetch_buffer, ro, handle, dict, &block, block_type,
                     get_context, lookup_context, for_compaction,
                     /* use_cache */ true, /* wait_for_cache */ true);
-
   if (!s.ok()) {
     assert(block.IsEmpty());
     iter->Invalidate(s);

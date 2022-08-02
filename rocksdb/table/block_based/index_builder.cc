@@ -177,6 +177,7 @@ void PartitionedIndexBuilder::AddIndexEntry(
           partition_cut_requested_ ||
           flush_policy_->Update(*last_key_in_current_block, handle_encoding);
       if (do_flush) {
+		  sub_index_last_key_ = std::string(*last_key_in_current_block);
         entries_.push_back(
             {sub_index_last_key_,
              std::unique_ptr<ShortenedIndexBuilder>(sub_index_builder_)});
@@ -226,7 +227,9 @@ void PartitionedIndexBuilder::AddIndexEntry_Unify(
           sub_index_builder_->index_block_builder_));
     }
     sub_index_last_key_ = std::string(*last_key_in_current_block);
-    entries_.push_back(
+
+		  printf("INDEX PUSH\t %s\n",sub_index_last_key_.c_str());
+	entries_.push_back(
         {sub_index_last_key_,
          std::unique_ptr<ShortenedIndexBuilder>(sub_index_builder_)});
     sub_index_builder_ = nullptr;
@@ -237,9 +240,12 @@ void PartitionedIndexBuilder::AddIndexEntry_Unify(
       std::string handle_encoding;
       block_handle.EncodeTo(&handle_encoding);
       bool do_flush =
-		  unify_cut_requested_ ||
+		  unify_cut_requested_||
           flush_policy_->Update(*last_key_in_current_block, handle_encoding);
       if (do_flush) {
+		  // BIG SSD TEMP
+		  sub_index_last_key_ = std::string(*last_key_in_current_block);
+		  printf("INDEX PUSH\t %s\n",sub_index_last_key_.c_str());
         entries_.push_back(
             {sub_index_last_key_,
              std::unique_ptr<ShortenedIndexBuilder>(sub_index_builder_)});
@@ -253,7 +259,7 @@ void PartitionedIndexBuilder::AddIndexEntry_Unify(
     }
     sub_index_builder_->AddIndexEntry(last_key_in_current_block,
                                       first_key_in_next_block, block_handle);
-    sub_index_last_key_ = std::string(*last_key_in_current_block);
+//    sub_index_last_key_ = std::string(*last_key_in_current_block);
     if (!seperator_is_key_plus_seq_ &&
         sub_index_builder_->seperator_is_key_plus_seq_) {
       // then we need to apply it to all sub-index builders and reset
@@ -270,7 +276,7 @@ void PartitionedIndexBuilder::AddIndexEntry_Unify(
 // BIG SSD
 size_t PartitionedIndexBuilder::CalculateSize() {
 	if(sub_index_builder_ != nullptr)
-		return sub_index_builder_->index_block_builder_.CurrentSizeEstimate();
+		return sub_index_builder_->index_block_builder_without_seq_.CurrentSizeEstimate();
 	return 0;
 }
 
@@ -291,6 +297,7 @@ Status PartitionedIndexBuilder::Finish(
         last_partition_block_handle.size() - last_encoded_handle_.size());
     last_encoded_handle_ = last_partition_block_handle;
     const Slice handle_delta_encoding_slice(handle_delta_encoding);
+//	printf("INDEX\t%s\n",(last_entry.key).c_str());
     index_block_builder_.Add(last_entry.key, handle_encoding,
                              &handle_delta_encoding_slice);
     if (!seperator_is_key_plus_seq_) {
@@ -330,6 +337,18 @@ Slice PartitionedIndexBuilder::Finish_Unify(
   if (partition_cnt_ == 0) {
     partition_cnt_ = entries_.size();
   }
+/* 
+  if(entries_.size() == 0){
+	  return Slice();
+  }
+
+  Entry& entry = entries_.front();
+  entry.value->seperator_is_key_plus_seq_ = seperator_is_key_plus_seq_;
+  auto s = entry.value->Finish(index_blocks);
+  index_size_ += index_blocks->index_block_contents.size();
+  entries_.pop_front();
+  return index_blocks->index_block_contents;
+*/
 
   if(order == partition_cnt_){
 	  return Slice();
@@ -340,14 +359,22 @@ Slice PartitionedIndexBuilder::Finish_Unify(
   auto it = entries_.begin();
   std::advance(it, order);
   Entry& entry = *it;
+  printf("INDEX\t\t%s\n", entry.key.c_str());
   
   entry.value->seperator_is_key_plus_seq_ = seperator_is_key_plus_seq_;
 
   entry.value->Finish_Unify(index_blocks);
 
+//  size_t index_size = (index_blocks->index_block_contents).size();
+//  printf("index size %lu\n", index_size);
+//  for(size_t i=index_size-1; i>=index_size-10; i--){
+//	  printf("%d ", (index_blocks->index_block_contents).data()[i]);
+//  }
+//  printf("\n");
   return index_blocks->index_block_contents;
 //  printf("%ld %ld\n", entry.value->index_block_builder_without_seq_.CurrentSizeEstimate(), index_blocks->index_block_contents.size());
 //  return s.ok() ? Status::Incomplete() : s;
+
 }
 
 
