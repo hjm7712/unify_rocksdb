@@ -1046,64 +1046,49 @@ void BlockBasedTableBuilder::Add_Unify(const Slice& key, const Slice& value) {
 	// BIG SSD
 	// If unify block is filled, flush data block whether it is not filled
 	bool unify_filled = r->index_builder->CheckUnifyCut();
-/*	if(unify_filled == true){
-	  assert(!r->data_block.empty());
-      r->first_key_in_next_block = &key;
-      Flush();
-	  if (ok() && r->state == Rep::State::kUnbuffered) {
-		  if (r->IsParallelCompressionEnabled()) {
-			  r->pc_rep->curr_block_keys->Clear();
-		  } else {
-			  r->index_builder->AddIndexEntry_Unify(&r->last_key, &key,
-					  r->pending_handle);
-		  }
-	  }
-	}
-	else{*/
-		auto should_flush = r->flush_block_policy->Update(key, value);
-		if (should_flush || unify_filled) {
-			assert(!r->data_block.empty());
-			r->first_key_in_next_block = &key;
-			Flush();
-			if (r->state == Rep::State::kBuffered) {
-				bool exceeds_buffer_limit =
-					(r->buffer_limit != 0 && r->data_begin_offset > r->buffer_limit);
-				bool exceeds_global_block_cache_limit = false;
+	auto should_flush = r->flush_block_policy->Update(key, value);
+	if (should_flush || unify_filled) {
+		assert(!r->data_block.empty());
+		r->first_key_in_next_block = &key;
+		Flush();
+		if (r->state == Rep::State::kBuffered) {
+			bool exceeds_buffer_limit =
+				(r->buffer_limit != 0 && r->data_begin_offset > r->buffer_limit);
+			bool exceeds_global_block_cache_limit = false;
 
-				// Increase cache reservation for the last buffered data block
-				// only if the block is not going to be unbuffered immediately
-				// and there exists a cache reservation manager
-				if (!exceeds_buffer_limit &&
-						r->compression_dict_buffer_cache_res_mgr != nullptr) {
-					Status s =
-						r->compression_dict_buffer_cache_res_mgr->UpdateCacheReservation(
-								r->data_begin_offset);
-					exceeds_global_block_cache_limit = s.IsIncomplete();
-				}
-
-				if (exceeds_buffer_limit || exceeds_global_block_cache_limit) {
-					EnterUnbuffered();
-				}
+			// Increase cache reservation for the last buffered data block
+			// only if the block is not going to be unbuffered immediately
+			// and there exists a cache reservation manager
+			if (!exceeds_buffer_limit &&
+					r->compression_dict_buffer_cache_res_mgr != nullptr) {
+				Status s =
+					r->compression_dict_buffer_cache_res_mgr->UpdateCacheReservation(
+							r->data_begin_offset);
+				exceeds_global_block_cache_limit = s.IsIncomplete();
 			}
 
-			// Add item to index block.
-			// We do not emit the index entry for a block until we have seen the
-			// first key for the next data block.  This allows us to use shorter
-			// keys in the index block.  For example, consider a block boundary
-			// between the keys "the quick brown fox" and "the who".  We can use
-			// "the r" as the key for the index block entry since it is >= all
-			// entries in the first block and < all entries in subsequent
-			// blocks.
-			if (ok() && r->state == Rep::State::kUnbuffered) {
-				if (r->IsParallelCompressionEnabled()) {
-					r->pc_rep->curr_block_keys->Clear();
-				} else {
-					r->index_builder->AddIndexEntry_Unify(&r->last_key, &key,
-							r->pending_handle);
-				}
+			if (exceeds_buffer_limit || exceeds_global_block_cache_limit) {
+				EnterUnbuffered();
 			}
 		}
-//	}
+
+		// Add item to index block.
+		// We do not emit the index entry for a block until we have seen the
+		// first key for the next data block.  This allows us to use shorter
+		// keys in the index block.  For example, consider a block boundary
+		// between the keys "the quick brown fox" and "the who".  We can use
+		// "the r" as the key for the index block entry since it is >= all
+		// entries in the first block and < all entries in subsequent
+		// blocks.
+		if (ok() && r->state == Rep::State::kUnbuffered) {
+			if (r->IsParallelCompressionEnabled()) {
+				r->pc_rep->curr_block_keys->Clear();
+			} else {
+				r->index_builder->AddIndexEntry_Unify(&r->last_key, &key,
+						r->pending_handle);
+			}
+		}
+	}
 
 	cur_index_size = r->index_builder->CalculateSize();
 
@@ -1493,13 +1478,15 @@ void BlockBasedTableBuilder::WriteRawBlock_Unify(const Slice& unify_contents,
   StopWatch sw(r->ioptions.clock, r->ioptions.stats, WRITE_RAW_BLOCK_MICROS);
   handle->set_offset(r->get_offset());
   handle->set_size(unify_contents.size());
+//  handle->set_index_offset(r->get_offset() + filter_block_contents.size());
+  
   assert(status().ok());
   assert(io_status().ok());
 
-  // filter block + index block + filter_size block
+  // partition: filter block + index block + filter_size block
   // top level: filter block + filter_size block
   {
-    IOStatus io_s = r->file->Append(unify_contents);
+    IOStatus io_s = r->file->Append(Slice(unify_contents.data(), unify_contents.size()));
     if (!io_s.ok()) {
       r->SetIOStatus(io_s);
       return;
@@ -1882,58 +1869,37 @@ void BlockBasedTableBuilder::WriteUnifyBlock(
         top_level_filter_block = true;
       }
 
-//	  if(top_level_filter_block == true){
-//		  std::string s_filter_content(filter_content.data(), filter_content.size());
-		  
-//		  std::array<char, sizeof(uint64_t)> filter_size;
-//		  EncodeFixed64(filter_size.data(), filter_content.size());
-//		  std::string s_filter_size(filter_size.data(), filter_size.size());
+	  //		  unsigned long long start, end_1, end_2, lo, hi;
+	  //		  asm volatile("rdtsc" : "=a" (lo), "=d" (hi));
+	  //		  start = ((unsigned long long)hi << 32) | lo;
 
-//		  std::string s_unify_content = s_filter_content + s_filter_size;	// top level (no index)
-//		  Slice unify_content(s_unify_content.c_str(), s_unify_content.length());
-		 
-//		  WriteRawBlock_Unify(unify_content, filter_content,
-//				  kNoCompression, unify_block_handle,
-//				  BlockType::kUnify, nullptr /*raw_contents*/,
-//				  top_level_filter_block);
+	  Slice index_content = rep_->index_builder->Finish_Unify(&index_blocks, order++);
+	  //		  asm volatile("rdtsc" : "=a" (lo), "=d" (hi));
+	  //		  end_1 = ((unsigned long long)hi << 32) | lo;
 
-//		  WriteRawBlock(filter_content, kNoCompression, unify_block_handle,
-//				  BlockType::kUnify, nullptr /*raw_contents*/,
-//				  top_level_filter_block);
-//	  }
-//	  else{
-//		  unsigned long long start, end_1, end_2, lo, hi;
-//		  asm volatile("rdtsc" : "=a" (lo), "=d" (hi));
-//		  start = ((unsigned long long)hi << 32) | lo;
+	  std::string s_filter_content(filter_content.data(), filter_content.size());
+	  std::string s_index_content(index_content.data(), index_content.size());
 
-		  Slice index_content = rep_->index_builder->Finish_Unify(&index_blocks, order++);
-//		  asm volatile("rdtsc" : "=a" (lo), "=d" (hi));
-//		  end_1 = ((unsigned long long)hi << 32) | lo;
+	  std::array<char, sizeof(uint64_t)> filter_size;
+	  EncodeFixed64(filter_size.data(), filter_content.size());
+	  std::string s_filter_size(filter_size.data(), filter_size.size());
 
-		  std::string s_filter_content(filter_content.data(), filter_content.size());
-		  std::string s_index_content(index_content.data(), index_content.size());
+	  std::string s_unify_content = s_filter_content + s_index_content + s_filter_size;
+	  Slice unify_content(s_unify_content.c_str(), s_unify_content.length());
 
-		  std::array<char, sizeof(uint64_t)> filter_size;
-		  EncodeFixed64(filter_size.data(), filter_content.size());
-		  std::string s_filter_size(filter_size.data(), filter_size.size());
+	  //		  asm volatile("rdtsc" : "=a" (lo), "=d" (hi));          
+	  //		  end_2 = ((unsigned long long)hi << 32) | lo;
 
-		  std::string s_unify_content = s_filter_content + s_index_content + s_filter_size;
-		  Slice unify_content(s_unify_content.c_str(), s_unify_content.length());
+	  //		  printf("latency %llu %llu\n", (end_1-start)/2600, (end_2-end_1)/2600);
 
-//		  asm volatile("rdtsc" : "=a" (lo), "=d" (hi));          
-//		  end_2 = ((unsigned long long)hi << 32) | lo;
+	  //		  printf("filter %ld index %ld sum %ld\n", filter_content.size(), index_content.size(), filter_content.size() + index_content.size());
+	  //		  printf("unify %ld\n", unify_content.size());
 
-//		  printf("latency %llu %llu\n", (end_1-start)/2600, (end_2-end_1)/2600);
-
-//		  printf("filter %ld index %ld sum %ld\n", filter_content.size(), index_content.size(), filter_content.size() + index_content.size());
-//		  printf("unify %ld\n", unify_content.size());
-
-		  WriteRawBlock_Unify(unify_content, filter_content,
-				  kNoCompression, unify_block_handle,
-				  BlockType::kUnify, nullptr /*raw_contents*/,
-				  top_level_filter_block);
-//	  }
-    }
+	  WriteRawBlock_Unify(unify_content, filter_content,
+			  kNoCompression, unify_block_handle,
+			  BlockType::kUnify, nullptr /*raw_contents*/,
+			  top_level_filter_block);
+	}
     rep_->filter_builder->ResetFilterBitsBuilder();
   }
   if (ok() && !empty_filter_block) {
@@ -2411,7 +2377,7 @@ Status BlockBasedTableBuilder::Finish_Unify() {
     // To make sure properties block is able to keep the accurate size of index
     // block, we will finish writing all index entries first.
     if (ok() && !empty_data_block) {
-      r->index_builder->AddIndexEntry(
+      r->index_builder->AddIndexEntry_Unify(
           &r->last_key, nullptr /* no next data block */, r->pending_handle);
     }
   }
@@ -2432,7 +2398,7 @@ Status BlockBasedTableBuilder::Finish_Unify() {
   WriteUnifyBlock(&meta_index_builder, &unify_block_handle);
 //  printf("Unify end\n");
 //  printf("Index start\n");
-  WriteIndexBlock(&meta_index_builder, &index_block_handle);
+//  WriteIndexBlock(&meta_index_builder, &index_block_handle);
 //  printf("Index end\n");
   WriteCompressionDictBlock(&meta_index_builder);
   WriteRangeDelBlock(&meta_index_builder);
@@ -2443,7 +2409,7 @@ Status BlockBasedTableBuilder::Finish_Unify() {
                   &metaindex_block_handle, BlockType::kMetaIndex);
   }
   if (ok()) {
-    WriteFooter(metaindex_block_handle, index_block_handle);
+    WriteFooter(metaindex_block_handle, unify_block_handle);
   }
   r->state = Rep::State::kClosed;
   r->SetStatus(r->CopyIOStatus());

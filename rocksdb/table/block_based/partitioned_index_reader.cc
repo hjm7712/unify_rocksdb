@@ -50,6 +50,7 @@ InternalIteratorBase<IndexValue>* PartitionIndexReader::NewIterator(
     BlockCacheLookupContext* lookup_context) {
   const bool no_io = (read_options.read_tier == kBlockCacheTier);
   CachableEntry<Block> index_block;
+  printf("top level index\n");
   const Status s =
       GetOrReadIndexBlock(no_io, get_context, lookup_context, &index_block);
   if (!s.ok()) {
@@ -61,7 +62,7 @@ InternalIteratorBase<IndexValue>* PartitionIndexReader::NewIterator(
     return NewErrorInternalIterator<IndexValue>(s);
   }
 
-//	  printf("index %p %ld\n",index_block.GetValue(), index_block.GetValue()->size());
+	  printf("index %p %ld\n",index_block.GetValue(), index_block.GetValue()->size());
 //  if(gettid()%NUM_THREADS==0){
 //	  printf("index %p %ld\n",index_block.GetValue(), index_block.GetValue()->size());
 //  }

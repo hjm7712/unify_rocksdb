@@ -221,8 +221,8 @@ inline void BlockFetcher::GetBlockContents() {
 		char tmp_buf[8];
 	  	memcpy(tmp_buf, &used_buf_[block_size_-sizeof(uint64_t)], sizeof(uint64_t));
   		uint64_t filter_size = DecodeFixed64(tmp_buf);
-		size_t index_size = block_size_ - filter_size - sizeof(uint64_t);
-		printf("Filter block size %lu filter size %lu index size %lu\n", block_size_, filter_size, index_size);
+		uint64_t index_size = block_size_ - filter_size - sizeof(uint64_t);
+//		printf("Filter block size %lu filter size %lu index size %lu\n", block_size_, filter_size, index_size);
 		if(block_size_ == filter_size + index_size + sizeof(uint64_t) && filter_size < block_size_ && index_size < block_size_){
 //			printf("block size %lu filter size %lu\n", block_size_, filter_size);
 			heap_buf_ = AllocateBlock(filter_size, memory_allocator_);
@@ -239,12 +239,12 @@ inline void BlockFetcher::GetBlockContents() {
 			check = 1;
 		}
 	}
-	else if(block_type_ == BlockType::kIndex){
+/*	else if(block_type_ == BlockType::kIndex){
 		char tmp_buf[8];
 		memcpy(tmp_buf, &used_buf_[block_size_-sizeof(uint64_t)], sizeof(uint64_t));
 		uint64_t filter_size = DecodeFixed64(tmp_buf);
-		size_t index_size = block_size_ - filter_size - sizeof(uint64_t);
-		printf("Index block size %lu filter size %lu index size %lu\n", block_size_, filter_size, index_size);
+		uint64_t index_size = block_size_ - filter_size - sizeof(uint64_t);
+//		printf("Index block size %lu filter size %lu index size %lu\n", block_size_, filter_size, index_size);
 		if(block_size_ == filter_size + index_size + sizeof(uint64_t) && filter_size < block_size_ && index_size < block_size_){
 //			printf("block size %lu filter size %lu index read %lu\n", block_size_, filter_size, index_size);
 			if(index_size == 0){	// need top level
@@ -258,10 +258,10 @@ inline void BlockFetcher::GetBlockContents() {
 #ifndef NDEBUG
 			num_heap_buf_memcpy_++;
 #endif
-			*contents_ = BlockContents(std::move(heap_buf_), index_size > 0 ? index_size : filter_size);
+			*contents_ = BlockContents(std::move(heap_buf_), index_size == 0 ? filter_size : index_size);
 			check = 1;
 		}
-	}
+	}*/
 	if(check == 0) {
 		printf("Read Other block %d %lu\n", (int)block_type_, block_size_);
 		// page can be either uncompressed or compressed, the buffer either stack

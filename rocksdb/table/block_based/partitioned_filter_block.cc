@@ -123,7 +123,7 @@ void PartitionedFilterBlockBuilder::MaybeCutAFilterBlock_Unify(
   size_t next_filter_size = filter_bits_builder_->CalculateSize(keys_added_to_partition_ + 2);
 
   // sizeof(uint64_t) --> filter size block
-  size_t unify_size = partition_size_ - sizeof(uint64_t);
+  size_t unify_size = (partition_size_)*0.98 - sizeof(uint64_t);
 
   if((filter_size < next_filter_size) && (next_filter_size + index_size >= unify_size)){
 //	  printf("f %ld nf %ld index %ld sum %ld\n", filter_size, next_filter_size, index_size, index_size+filter_size);

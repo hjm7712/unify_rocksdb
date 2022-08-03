@@ -46,6 +46,9 @@ class BlockHandle {
   // The offset of the block in the file.
   uint64_t offset() const { return offset_; }
   void set_offset(uint64_t _offset) { offset_ = _offset; }
+  // BIG SSD
+//  uint64_t index_offset() const { return index_offset_; }
+//  void set_index_offset(uint64_t _index_offset) { index_offset_ = _index_offset; }
 
   // The size of the stored block
   uint64_t size() const { return size_; }
@@ -78,6 +81,8 @@ class BlockHandle {
  private:
   uint64_t offset_;
   uint64_t size_;
+  // BIG SSD
+//  uint64_t index_offset_;
 
   static const BlockHandle kNullBlockHandle;
 };

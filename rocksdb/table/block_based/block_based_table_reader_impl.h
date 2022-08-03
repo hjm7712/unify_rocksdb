@@ -52,6 +52,7 @@ TBlockIter* BlockBasedTable::NewDataBlockIterator(
                                       : UncompressionDict::GetEmptyDict();
 
   CachableEntry<Block> block;
+  printf("block type %d\n", (int)block_type);
   s = RetrieveBlock(prefetch_buffer, ro, handle, dict, &block, block_type,
                     get_context, lookup_context, for_compaction,
                     /* use_cache */ true, /* wait_for_cache */ true);
@@ -76,6 +77,8 @@ TBlockIter* BlockBasedTable::NewDataBlockIterator(
   iter = InitBlockIterator<TBlockIter>(rep_, block.GetValue(), block_type, iter,
                                        block_contents_pinned);
 
+  printf("g\n");
+
   if (!block.IsCached()) {
     if (!ro.fill_cache) {
       Cache* const block_cache = rep_->table_options.block_cache.get();
@@ -95,11 +98,13 @@ TBlockIter* BlockBasedTable::NewDataBlockIterator(
       }
     }
   } else {
+  printf("cache handle %p\n", block.GetCacheHandle());
     iter->SetCacheHandle(block.GetCacheHandle());
   }
 
   block.TransferTo(iter);
 
+  printf("j\n");
   return iter;
 }
 

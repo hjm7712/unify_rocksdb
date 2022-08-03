@@ -1394,7 +1394,6 @@ Status BlockBasedTable::PutDataBlockToCache(
   // insert into uncompressed block cache
   if (block_cache != nullptr && block_holder->own_bytes()) {
     size_t charge = block_holder->ApproximateMemoryUsage();
-	printf("charge %lu\n", charge);
     Cache::Handle* cache_handle = nullptr;
     s = InsertEntryToCache(
         rep_->ioptions.lowest_used_cache_tier, block_cache, cache_key,
@@ -1495,7 +1494,7 @@ template <typename TBlocklike>
 Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
     FilePrefetchBuffer* prefetch_buffer, const ReadOptions& ro,
     const BlockHandle& handle, const UncompressionDict& uncompression_dict,
-    const bool /*wait*/, const bool for_compaction,
+    const bool wait, const bool for_compaction,
     CachableEntry<TBlocklike>* block_entry, BlockType block_type,
     GetContext* get_context, BlockCacheLookupContext* lookup_context,
     BlockContents* contents) const {
@@ -1515,23 +1514,23 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
 
   if (block_cache != nullptr || block_cache_compressed != nullptr) {
     // create key for block cache
-//	  if(block_type == BlockType::kIndex){
-//		  key_data = (rep_->base_cache_key).WithOffset(handle.offset() >> 3);
-//		  key = key_data.AsSlice();
-//	  }
-//	  else{
+	  if(block_type == BlockType::kIndex){
+		  key_data = (rep_->base_cache_key).WithOffset((handle.offset() >> 2)-1);
+		  key = key_data.AsSlice();
+	  }
+	  else{
 		  key_data = GetCacheKey(rep_->base_cache_key, handle);
 		  key = key_data.AsSlice();
-//	  }
+	  }
 
-/*    if (!contents) {
+    if (!contents) {
       s = GetDataBlockFromCache(key, block_cache, block_cache_compressed, ro,
                                 block_entry, uncompression_dict, block_type,
                                 wait, get_context);
       // Value could still be null at this point, so check the cache handle
       // and update the read pattern for prefetching
       if (block_entry->GetValue() || block_entry->GetCacheHandle()) {
-		  printf("get from cache %d\n", (int)block_type);
+		  printf("get from cache %d size %lu\n", (int)block_type, handle.size());
         // TODO(haoyu): Differentiate cache hit on uncompressed block cache and
         // compressed block cache.
         is_cache_hit = true;
@@ -1549,11 +1548,11 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
           // prefetching. It should also take in account blocks read from cache.
           prefetch_buffer->UpdateReadPattern(
               handle.offset(), BlockSizeWithTrailer(handle),
-              ro.adaptive_readahead *//*decrease_readahead_size*//*);
+              ro.adaptive_readahead /*decrease_readahead_size*/);
         }
       }
 	}
-*/
+
     // Can't find the block from the cache. If I/O is allowed, read from the
     // file.
     if (block_entry->GetValue() == nullptr &&
@@ -1571,25 +1570,12 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
           block_type != BlockType::kFilter &&
           block_type != BlockType::kCompressionDictionary &&
           rep_->blocks_maybe_compressed;
-      
+
 	  const bool do_uncompress = maybe_compressed && !block_cache_compressed;
       CompressionType raw_block_comp_type;
       BlockContents raw_block_contents;
 
-/*	  if (!contents && block_type == BlockType::kIndex){
-		  BlockFetcher block_fetcher(
-				  rep_->file.get(), prefetch_buffer, rep_->footer, ro, handle,
-				  &raw_block_contents, rep_->ioptions, do_uncompress,
-				  maybe_compressed, block_type, uncompression_dict,
-				  rep_->persistent_cache_options,
-				  GetMemoryAllocator(rep_->table_options),
-				  GetMemoryAllocatorForCompressedBlock(rep_->table_options));
-		  s = block_fetcher.ReadBlockContents_Unify();
-		  raw_block_comp_type = block_fetcher.get_compression_type();
-		  contents = &raw_block_contents;
-
-	  }
-	  else*/ if (!contents) {
+	  if (!contents) {
         Histograms histogram = for_compaction ? READ_BLOCK_COMPACTION_MICROS
                                               : READ_BLOCK_GET_MICROS;
         StopWatch sw(rep_->ioptions.clock, statistics, histogram);
@@ -1644,6 +1630,7 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
       nkeys =
           rep_->table_options.block_restart_interval *
           BlocklikeTraits<TBlocklike>::GetNumRestarts(*block_entry->GetValue());
+	  printf("nkey %lu\n", nkeys);
       usage = block_entry->GetValue()->ApproximateMemoryUsage();
     }
     TraceType trace_block_type = TraceType::kTraceMax;
@@ -2006,6 +1993,7 @@ Status BlockBasedTable::RetrieveBlock(
 //  printf("read trigger %d\n", (int)block_type);
   Status s;
   if (use_cache) {
+	  printf("a\n");
     s = MaybeReadBlockAndLoadToCache(
         prefetch_buffer, ro, handle, uncompression_dict, wait_for_cache,
         for_compaction, block_entry, block_type, get_context, lookup_context,
@@ -2013,9 +2001,11 @@ Status BlockBasedTable::RetrieveBlock(
     if (!s.ok()) {
       return s;
     }
+	  printf("c\n");
 
     if (block_entry->GetValue() != nullptr ||
         block_entry->GetCacheHandle() != nullptr) {
+	  printf("d\n");
       assert(s.ok());
       return s;
     }

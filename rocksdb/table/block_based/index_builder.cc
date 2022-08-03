@@ -244,7 +244,7 @@ void PartitionedIndexBuilder::AddIndexEntry_Unify(
           flush_policy_->Update(*last_key_in_current_block, handle_encoding);
       if (do_flush) {
 		  // BIG SSD TEMP
-		  sub_index_last_key_ = std::string(*last_key_in_current_block);
+//		  sub_index_last_key_ = std::string(*last_key_in_current_block);
 		  printf("INDEX PUSH\t %s\n",sub_index_last_key_.c_str());
         entries_.push_back(
             {sub_index_last_key_,
@@ -259,7 +259,7 @@ void PartitionedIndexBuilder::AddIndexEntry_Unify(
     }
     sub_index_builder_->AddIndexEntry(last_key_in_current_block,
                                       first_key_in_next_block, block_handle);
-//    sub_index_last_key_ = std::string(*last_key_in_current_block);
+    sub_index_last_key_ = std::string(*last_key_in_current_block);
     if (!seperator_is_key_plus_seq_ &&
         sub_index_builder_->seperator_is_key_plus_seq_) {
       // then we need to apply it to all sub-index builders and reset
@@ -333,13 +333,19 @@ Status PartitionedIndexBuilder::Finish(
 
 // BIG SSD
 Slice PartitionedIndexBuilder::Finish_Unify(
-    IndexBlocks* index_blocks, const BlockHandle& /*last_partition_block_handle*/, size_t order) {
+    IndexBlocks* index_blocks, const BlockHandle& /*last_partition_block_handle*/, size_t /*order*/) {
   if (partition_cnt_ == 0) {
     partition_cnt_ = entries_.size();
   }
-/* 
-  if(entries_.size() == 0){
-	  return Slice();
+ 
+  if(entries_.empty()){
+//	  if (seperator_is_key_plus_seq_) {
+//		  index_blocks->index_block_contents =index_block_builder_.Finish();
+//	  } else {
+//		  index_blocks->index_block_contents =index_block_builder_without_seq_.Finish();
+//	  }
+	  index_blocks->index_block_contents = Slice();
+	  return index_blocks->index_block_contents;
   }
 
   Entry& entry = entries_.front();
@@ -348,8 +354,7 @@ Slice PartitionedIndexBuilder::Finish_Unify(
   index_size_ += index_blocks->index_block_contents.size();
   entries_.pop_front();
   return index_blocks->index_block_contents;
-*/
-
+/*
   if(order == partition_cnt_){
 	  return Slice();
   }
@@ -374,7 +379,7 @@ Slice PartitionedIndexBuilder::Finish_Unify(
   return index_blocks->index_block_contents;
 //  printf("%ld %ld\n", entry.value->index_block_builder_without_seq_.CurrentSizeEstimate(), index_blocks->index_block_contents.size());
 //  return s.ok() ? Status::Incomplete() : s;
-
+*/
 }
 
 
