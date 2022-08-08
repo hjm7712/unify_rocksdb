@@ -1529,9 +1529,6 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
       // Value could still be null at this point, so check the cache handle
       // and update the read pattern for prefetching
       if (block_entry->GetValue() || block_entry->GetCacheHandle()) {
-//		  size_t sz = DecodeFixed64(&(((Block*)block_entry->GetValue())->data()[handle.size()-8]));
-//		  printf("size %lu\n", sz);
-
 //		  printf("get from cache %d size %lu\n", (int)block_type, handle.size());
         // TODO(haoyu): Differentiate cache hit on uncompressed block cache and
         // compressed block cache.
