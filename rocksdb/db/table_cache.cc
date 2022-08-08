@@ -192,12 +192,14 @@ Status TableCache::FindTable(
         record_read_stats, file_read_hist, &table_reader, prefix_extractor,
         skip_filters, level, prefetch_index_and_filter_in_cache,
         max_file_size_for_l0_meta_pin, file_temperature);
+	printf("4\n");
     if (!s.ok()) {
       assert(table_reader == nullptr);
       RecordTick(ioptions_.stats, NO_FILE_ERRORS);
       // We do not cache error results so that if the error is transient,
       // or somebody repairs the file, we recover automatically.
     } else {
+	printf("6\n");
       s = cache_->Insert(key, table_reader.get(), 1, &DeleteEntry<TableReader>,
                          handle);
       if (s.ok()) {
@@ -205,6 +207,7 @@ Status TableCache::FindTable(
         table_reader.release();
       }
     }
+	printf("7\n");
     return s;
   }
   return Status::OK();

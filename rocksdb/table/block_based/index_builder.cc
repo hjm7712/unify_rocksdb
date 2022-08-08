@@ -228,7 +228,7 @@ void PartitionedIndexBuilder::AddIndexEntry_Unify(
     }
     sub_index_last_key_ = std::string(*last_key_in_current_block);
 
-		  printf("INDEX PUSH\t %s\n",sub_index_last_key_.c_str());
+//		  printf("INDEX PUSH\t %s\n",sub_index_last_key_.c_str());
 	entries_.push_back(
         {sub_index_last_key_,
          std::unique_ptr<ShortenedIndexBuilder>(sub_index_builder_)});
@@ -245,7 +245,7 @@ void PartitionedIndexBuilder::AddIndexEntry_Unify(
       if (do_flush) {
 		  // BIG SSD TEMP
 //		  sub_index_last_key_ = std::string(*last_key_in_current_block);
-		  printf("INDEX PUSH\t %s\n",sub_index_last_key_.c_str());
+//		  printf("INDEX PUSH\t %s\n",sub_index_last_key_.c_str());
         entries_.push_back(
             {sub_index_last_key_,
              std::unique_ptr<ShortenedIndexBuilder>(sub_index_builder_)});
@@ -338,11 +338,11 @@ Slice PartitionedIndexBuilder::Finish_Unify(
     partition_cnt_ = entries_.size();
   }
  
-  if(entries_.empty()){
+  if(UNLIKELY(entries_.empty())){
 //	  if (seperator_is_key_plus_seq_) {
-//		  index_blocks->index_block_contents =index_block_builder_.Finish();
+//		  return index_blocks->index_block_contents =index_block_builder_.Finish();
 //	  } else {
-//		  index_blocks->index_block_contents =index_block_builder_without_seq_.Finish();
+//		  return index_blocks->index_block_contents =index_block_builder_without_seq_.Finish();
 //	  }
 	  index_blocks->index_block_contents = Slice();
 	  return index_blocks->index_block_contents;

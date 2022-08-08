@@ -11,6 +11,9 @@
 
 #include "table/block_based/reader_common.h"
 
+// BIG SSD
+#include "table/block_based/block_like_traits.h"
+
 // The file contains some member functions of BlockBasedTable that
 // cannot be implemented in block_based_table_reader.cc because
 // it's called by other files (e.g. block_based_iterator.h) and
@@ -52,7 +55,6 @@ TBlockIter* BlockBasedTable::NewDataBlockIterator(
                                       : UncompressionDict::GetEmptyDict();
 
   CachableEntry<Block> block;
-  printf("block type %d\n", (int)block_type);
   s = RetrieveBlock(prefetch_buffer, ro, handle, dict, &block, block_type,
                     get_context, lookup_context, for_compaction,
                     /* use_cache */ true, /* wait_for_cache */ true);
@@ -64,6 +66,35 @@ TBlockIter* BlockBasedTable::NewDataBlockIterator(
 
   assert(block.GetValue() != nullptr);
 
+  size_t block_size = block.GetValue()->size();
+  size_t filter_size = DecodeFixed64(&block.GetValue()->data()[block_size-8]);
+  size_t index_size = block_size - filter_size - sizeof(uint64_t);
+  
+  printf("block %lu filter %lu index %lu\n", block_size, filter_size, index_size);
+
+  std::unique_ptr<char[]> tmp_buf(new char[index_size]);
+  memcpy(tmp_buf.get(), &block.GetValue()->data()[filter_size], index_size);
+  BlockContents cc(std::move(tmp_buf), index_size);
+  Block tmp_block(std::move(cc));
+
+//  BlockContents contents(Slice(&block.GetValue()->data()[filter_size], index_size));  
+//  BlockContents contents_(Slice(block.GetValue()->data(), index_size));  
+//  Block content_block(std::move(contents));
+//  Block content_block_(std::move(contents_));
+//  printf("content size %lu %lu\n", content_block.size(), content_block_.size());
+//  block.SetCachedValue(&content_block, block.GetCache(), block.GetCacheHandle());
+
+//  printf("size %lu\n", block.GetValue()->size());
+
+/*  CachableEntry<Block> tmp_block;
+  Block content_block(std::move(contents));
+  printf("%lu\n", content_block.size());
+
+  tmp_block.SetCachedValue(&content_block, block.GetCache(), block.GetCacheHandle());
+
+  printf("tmp size %lu\n", tmp_block.GetValue()->size());
+*/
+
   // Block contents are pinned and it is still pinned after the iterator
   // is destroyed as long as cleanup functions are moved to another object,
   // when:
@@ -74,7 +105,7 @@ TBlockIter* BlockBasedTable::NewDataBlockIterator(
   const bool block_contents_pinned =
       block.IsCached() ||
       (!block.GetValue()->own_bytes() && rep_->immortal_table);
-  iter = InitBlockIterator<TBlockIter>(rep_, block.GetValue(), block_type, iter,
+  iter = InitBlockIterator<TBlockIter>(rep_, &tmp_block, block_type, iter,
                                        block_contents_pinned);
 
   printf("g\n");
@@ -98,7 +129,6 @@ TBlockIter* BlockBasedTable::NewDataBlockIterator(
       }
     }
   } else {
-  printf("cache handle %p\n", block.GetCacheHandle());
     iter->SetCacheHandle(block.GetCacheHandle());
   }
 

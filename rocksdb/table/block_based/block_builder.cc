@@ -147,6 +147,7 @@ Slice BlockBuilder::Finish() {
 }
 
 // BIG SSD
+/*
 Slice BlockBuilder::Finish_Unify() {
   std::string tmp_buf = buffer_;
   // Append restart array
@@ -157,20 +158,20 @@ Slice BlockBuilder::Finish_Unify() {
   uint32_t num_restarts = static_cast<uint32_t>(restarts_.size());
   BlockBasedTableOptions::DataBlockIndexType index_type =
       BlockBasedTableOptions::kDataBlockBinarySearch;
-/*
+  
   if (data_block_hash_index_builder_.Valid() &&
       CurrentSizeEstimate() <= kMaxBlockSizeSupportedByHashIndex) {
     data_block_hash_index_builder_.Finish(buffer_);
     index_type = BlockBasedTableOptions::kDataBlockBinaryAndHash;
   }
-*/
+  
   // footer is a packed format of data_block_index_type and num_restarts
   uint32_t block_footer = PackIndexTypeAndNumRestarts(index_type, num_restarts);
 
   PutFixed32(&tmp_buf, block_footer);
   return Slice(tmp_buf);
 }
-
+*/
 
 void BlockBuilder::Add(const Slice& key, const Slice& value,
                        const Slice* const delta_value) {

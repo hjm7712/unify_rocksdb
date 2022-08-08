@@ -163,7 +163,7 @@ void PartitionedFilterBlockBuilder::MaybeCutAFilterBlock_Unify(
     filter_construction_status = filter_bits_builder_->MaybePostVerify(filter);
   }
   std::string& index_key = p_index_builder_->GetPartitionKey();
-  printf("FILTER PUSH %s\n", index_key.c_str());
+//  printf("FILTER PUSH %s\n", index_key.c_str());
   filters.push_back({index_key, std::move(filter_data), filter});
   if (!filter_construction_status.ok() &&
       partitioned_filters_construction_status_.ok()) {
@@ -206,7 +206,7 @@ Slice PartitionedFilterBlockBuilder::Finish(
         last_partition_block_handle.size() - last_encoded_handle_.size());
     last_encoded_handle_ = last_partition_block_handle;
     const Slice handle_delta_encoding_slice(handle_delta_encoding);
-	printf("FILTER\t\t%s\n", last_filter_entry_key.c_str());
+//	printf("FILTER\t\t%s\n", last_filter_entry_key.c_str());
     index_on_filter_block_builder_.Add(last_filter_entry_key, handle_encoding,
                                        &handle_delta_encoding_slice);
     if (!p_index_builder_->seperator_is_key_plus_seq()) {
@@ -350,13 +350,33 @@ BlockHandle PartitionedFilterBlockReader::GetFilterPartitionHandle(
   IndexBlockIter iter;
   const InternalKeyComparator* const comparator = internal_comparator();
   Statistics* kNullStats = nullptr;
-  filter_block.GetValue()->NewIndexIterator(
-      comparator->user_comparator(),
-      table()->get_rep()->get_global_seqno(BlockType::kFilter), &iter,
-      kNullStats, true /* total_order_seek */, false /* have_first_key */,
-      index_key_includes_seq(), index_value_is_full());
+
+  // BIG SSD
+  size_t block_size = filter_block.GetValue()->size();
+  size_t filter_size = DecodeFixed64(&filter_block.GetValue()->data()[block_size-8]);
+  printf("block %lu filter %lu\n", block_size, filter_size);
+  std::unique_ptr<char[]> tmp_buf(new char[filter_size]);
+  memcpy(tmp_buf.get(), filter_block.GetValue()->data(), filter_size);
+  BlockContents contents(std::move(tmp_buf), filter_size);
+
+  Block tmp_block(std::move(contents));
+  printf("tmp block %lu\n", tmp_block.size());
+
+  tmp_block.NewIndexIterator(
+		  comparator->user_comparator(),
+		  table()->get_rep()->get_global_seqno(BlockType::kFilter), &iter,
+		  kNullStats, true /* total_order_seek */, false /* have_first_key */,
+		  index_key_includes_seq(), index_value_is_full());
+
+//  filter_block.GetValue()->NewIndexIterator(
+//      comparator->user_comparator(),
+//      table()->get_rep()->get_global_seqno(BlockType::kFilter), &iter,
+//      kNullStats, true /* total_order_seek */, false /* have_first_key */,
+//      index_key_includes_seq(), index_value_is_full());
+
   iter.Seek(entry);
   if (UNLIKELY(!iter.Valid())) {
+	  printf("invalid\n");
     // entry is larger than all the keys. However its prefix might still be
     // present in the last partition. If this is called by PrefixMayMatch this
     // is necessary for correct behavior. Otherwise it is unnecessary but safe.
@@ -565,11 +585,26 @@ Status PartitionedFilterBlockReader::CacheDependencies(const ReadOptions& ro,
   IndexBlockIter biter;
   const InternalKeyComparator* const comparator = internal_comparator();
   Statistics* kNullStats = nullptr;
-  filter_block.GetValue()->NewIndexIterator(
+
+  size_t block_size = filter_block.GetValue()->size();
+  size_t filter_size = DecodeFixed64(&filter_block.GetValue()->data()[block_size-8]);
+  printf("block %lu filter %lu\n", block_size, filter_size);
+  BlockContents contents = BlockContents(Slice(filter_block.GetValue()->data(), filter_size));
+  Block tmp_block = Block(std::move(contents));
+
+  tmp_block.NewIndexIterator(
       comparator->user_comparator(), rep->get_global_seqno(BlockType::kFilter),
       &biter, kNullStats, true /* total_order_seek */,
       false /* have_first_key */, index_key_includes_seq(),
       index_value_is_full());
+
+//  filter_block.GetValue()->NewIndexIterator(
+//      comparator->user_comparator(), rep->get_global_seqno(BlockType::kFilter),
+//      &biter, kNullStats, true /* total_order_seek */,
+//      false /* have_first_key */, index_key_includes_seq(),
+//      index_value_is_full());
+
+
   // Index partitions are assumed to be consecuitive. Prefetch them all.
   // Read the first block offset
   biter.SeekToFirst();

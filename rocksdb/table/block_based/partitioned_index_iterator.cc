@@ -13,7 +13,10 @@ void PartitionedIndexIterator::Seek(const Slice& target) {
 	SeekImpl(&target); 
 }
 
-void PartitionedIndexIterator::SeekToFirst() { SeekImpl(nullptr); }
+void PartitionedIndexIterator::SeekToFirst() { 
+	printf("hihi\n");
+	SeekImpl(nullptr); 
+}
 
 void PartitionedIndexIterator::SeekImpl(const Slice* target) {
   SavePrevIndexValue();
@@ -21,7 +24,9 @@ void PartitionedIndexIterator::SeekImpl(const Slice* target) {
   if (target) {
     index_iter_->Seek(*target);
   } else {
+	  printf("before top seek\n");
     index_iter_->SeekToFirst();
+	  printf("after top seek\n");
   }
 
   if (!index_iter_->Valid()) {
@@ -29,15 +34,19 @@ void PartitionedIndexIterator::SeekImpl(const Slice* target) {
     return;
   }
 
+  printf("before init partition\n");
   InitPartitionedIndexBlock();
+  printf("after init partition\n");
   if (target) {
     block_iter_.Seek(*target);
   } else {
-	  printf("aa\n");
+	  printf("before partition seek\n");
     block_iter_.SeekToFirst();
-	  printf("bb\n");
+	  printf("after partition seek\n");
   }
+  printf("before find key\n");
   FindKeyForward();
+  printf("after find key\n");
   // We could check upper bound here, but that would be too complicated
   // and checking index upper bound is less useful than for data blocks.
 
@@ -76,7 +85,7 @@ void PartitionedIndexIterator::Prev() {
 
 void PartitionedIndexIterator::InitPartitionedIndexBlock() {
   BlockHandle partitioned_index_handle = index_iter_->value().handle;
-  printf("offset %lu size %lu\n", partitioned_index_handle.offset(), partitioned_index_handle.size());
+  printf("index offset %lu size %lu\n", partitioned_index_handle.offset(), partitioned_index_handle.size());
   if (!block_iter_points_to_real_block_ ||
       partitioned_index_handle.offset() != prev_block_offset_ ||
       // if previous attempt of reading the block missed cache, try again

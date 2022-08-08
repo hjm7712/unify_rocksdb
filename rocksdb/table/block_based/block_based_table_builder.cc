@@ -1874,19 +1874,55 @@ void BlockBasedTableBuilder::WriteUnifyBlock(
 	  //		  start = ((unsigned long long)hi << 32) | lo;
 
 	  Slice index_content = rep_->index_builder->Finish_Unify(&index_blocks, order++);
+	
+/*	  printf("slice index\n");
+	  for(int i=0;i<4; i++){
+		  printf("%d ", index_content.data()[index_content.size()-4+i]);
+	  }
+	  printf("\n");
+*/
+	  if(top_level_filter_block == true){
+		  assert(index_content.size() == 0);
+	  }
 	  //		  asm volatile("rdtsc" : "=a" (lo), "=d" (hi));
 	  //		  end_1 = ((unsigned long long)hi << 32) | lo;
 
-	  std::string s_filter_content(filter_content.data(), filter_content.size());
-	  std::string s_index_content(index_content.data(), index_content.size());
+	  char* tmp_index = new char[index_content.size()];
+	  memcpy(tmp_index, index_content.data(), sizeof(char)*index_content.size());
+	  
+/*	  printf("tmp index\n");
+	  for(int i=0;i<4; i++){
+		  printf("%d ", tmp_index[index_content.size()-4+i]);
+	  }
+	  printf("\n");
+*/
+	  std::string s_filter_content;
+	  s_filter_content.assign(filter_content.data(), filter_content.size());
 
+	  std::string s_index_content;
+	  s_index_content.assign(tmp_index, index_content.size());
+
+/*	  printf("string index\n");
+	  for(int i=0;i<4; i++){
+		  printf("%d ", s_index_content.c_str()[index_content.size()-4+i]);
+	  }
+	  printf("\n");
+*/
 	  std::array<char, sizeof(uint64_t)> filter_size;
 	  EncodeFixed64(filter_size.data(), filter_content.size());
-	  std::string s_filter_size(filter_size.data(), filter_size.size());
+	  std::string s_filter_size;
+	  s_filter_size.assign(filter_size.data(), sizeof(uint64_t));
 
-	  std::string s_unify_content = s_filter_content + s_index_content + s_filter_size;
+	  std::string s_unify_content;// = s_filter_content + s_index_content + s_filter_size;
+	  s_unify_content.append(s_filter_content).append(s_index_content).append(s_filter_size);
 	  Slice unify_content(s_unify_content.c_str(), s_unify_content.length());
 
+/*	  printf("write unify\n");
+	  for(int i=0;i<4; i++){
+		  printf("%d ", unify_content.data()[unify_content.size()-8-4+i]);
+	  }
+	  printf("\n");
+*/
 	  //		  asm volatile("rdtsc" : "=a" (lo), "=d" (hi));          
 	  //		  end_2 = ((unsigned long long)hi << 32) | lo;
 

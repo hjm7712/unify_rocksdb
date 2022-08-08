@@ -1477,6 +1477,7 @@ template <>
 IndexBlockIter* BlockBasedTable::InitBlockIterator<IndexBlockIter>(
     const Rep* rep, Block* block, BlockType block_type,
     IndexBlockIter* input_iter, bool block_contents_pinned) {
+	
   return block->NewIndexIterator(
       rep->internal_comparator.user_comparator(),
       rep->get_global_seqno(block_type), input_iter, rep->ioptions.stats,
@@ -1504,6 +1505,10 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
   Cache* block_cache_compressed =
       rep_->table_options.block_cache_compressed.get();
 
+  if(block_type == BlockType::kData){
+	  printf("Get data block\n");
+  }
+
   // First, try to get the block from the cache
   //
   // If either block cache is enabled, we'll try to read from it.
@@ -1514,23 +1519,20 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
 
   if (block_cache != nullptr || block_cache_compressed != nullptr) {
     // create key for block cache
-	  if(block_type == BlockType::kIndex){
-		  key_data = (rep_->base_cache_key).WithOffset((handle.offset() >> 2)-1);
-		  key = key_data.AsSlice();
-	  }
-	  else{
-		  key_data = GetCacheKey(rep_->base_cache_key, handle);
-		  key = key_data.AsSlice();
-	  }
-
-    if (!contents) {
+	key_data = GetCacheKey(rep_->base_cache_key, handle);
+	key = key_data.AsSlice();
+    
+	if (!contents) {
       s = GetDataBlockFromCache(key, block_cache, block_cache_compressed, ro,
                                 block_entry, uncompression_dict, block_type,
                                 wait, get_context);
       // Value could still be null at this point, so check the cache handle
       // and update the read pattern for prefetching
       if (block_entry->GetValue() || block_entry->GetCacheHandle()) {
-		  printf("get from cache %d size %lu\n", (int)block_type, handle.size());
+//		  size_t sz = DecodeFixed64(&(((Block*)block_entry->GetValue())->data()[handle.size()-8]));
+//		  printf("size %lu\n", sz);
+
+//		  printf("get from cache %d size %lu\n", (int)block_type, handle.size());
         // TODO(haoyu): Differentiate cache hit on uncompressed block cache and
         // compressed block cache.
         is_cache_hit = true;
@@ -1630,7 +1632,6 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
       nkeys =
           rep_->table_options.block_restart_interval *
           BlocklikeTraits<TBlocklike>::GetNumRestarts(*block_entry->GetValue());
-	  printf("nkey %lu\n", nkeys);
       usage = block_entry->GetValue()->ApproximateMemoryUsage();
     }
     TraceType trace_block_type = TraceType::kTraceMax;

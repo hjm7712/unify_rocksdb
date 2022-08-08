@@ -744,7 +744,9 @@ Status CompactionJob::Run() {
   // Always schedule the first subcompaction (whether or not there are also
   // others) in the current thread to be efficient with resources
   /*ProcessKeyValueCompaction(&compact_->sub_compact_states[0])*/;
+  printf("before process\n");
   ProcessKeyValueCompaction_Unify(&compact_->sub_compact_states[0]);
+  printf("after process\n");
 
   // Wait for all other threads (if there are any) to finish execution
   for (auto& thread : thread_pool) {
@@ -1762,6 +1764,7 @@ void CompactionJob::ProcessKeyValueCompaction_Unify(SubcompactionState* sub_comp
 
   ColumnFamilyData* cfd = sub_compact->compaction->column_family_data();
 
+  printf("1\n");
   // Create compaction filter and fail the compaction if
   // IgnoreSnapshots() = false because it is not supported anymore
   const CompactionFilter* compaction_filter =
@@ -1807,6 +1810,7 @@ void CompactionJob::ProcessKeyValueCompaction_Unify(SubcompactionState* sub_comp
 
   // Although the v2 aggregator is what the level iterator(s) know about,
   // the AddTombstones calls will be propagated down to the v1 aggregator.
+  printf("2\n");
   std::unique_ptr<InternalIterator> raw_input(versions_->MakeInputIterator(
       read_options, sub_compact->compaction, &range_del_agg,
       file_options_for_read_,
@@ -1838,6 +1842,7 @@ void CompactionJob::ProcessKeyValueCompaction_Unify(SubcompactionState* sub_comp
     input = clip.get();
   }
 
+  printf("3\n");
   std::unique_ptr<InternalIterator> blob_counter;
 
   if (sub_compact->compaction->DoesInputReferenceBlobFiles()) {
@@ -1847,6 +1852,7 @@ void CompactionJob::ProcessKeyValueCompaction_Unify(SubcompactionState* sub_comp
     input = blob_counter.get();
   }
 
+  printf("4\n");
   std::unique_ptr<InternalIterator> trim_history_iter;
   if (cfd->user_comparator()->timestamp_size() > 0 && !trim_ts_.empty()) {
     trim_history_iter = std::make_unique<HistoryTrimmingIterator>(
@@ -1854,8 +1860,10 @@ void CompactionJob::ProcessKeyValueCompaction_Unify(SubcompactionState* sub_comp
     input = trim_history_iter.get();
   }
 
+  printf("sibal 5\n");
   input->SeekToFirst();
 
+  printf("6\n");
   AutoThreadOperationStageUpdater stage_updater(
       ThreadStatus::STAGE_COMPACTION_PROCESS_KV);
 
@@ -1942,7 +1950,9 @@ void CompactionJob::ProcessKeyValueCompaction_Unify(SubcompactionState* sub_comp
           : sub_compact->compaction->CreateSstPartitioner();
   std::string last_key_for_partitioner;
 
+  printf("7\n");
   while (status.ok() && !cfd->IsDropped() && c_iter->Valid()) {
+	  printf("loop\n");
     // Invariant: c_iter.status() is guaranteed to be OK if c_iter->Valid()
     // returns true.
     const Slice& key = c_iter->key();
@@ -2043,6 +2053,7 @@ void CompactionJob::ProcessKeyValueCompaction_Unify(SubcompactionState* sub_comp
     }
   }
 
+  printf("8\n");
   sub_compact->compaction_job_stats.num_blobs_read =
       c_iter_stats.num_blobs_read;
   sub_compact->compaction_job_stats.total_blob_bytes_read =
