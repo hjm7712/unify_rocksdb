@@ -222,21 +222,12 @@ inline void BlockFetcher::GetBlockContents() {
 			// here
 			if(block_type_ == BlockType::kFilter){
 				size_t filter_size = DecodeFixed64(&used_buf_[block_size_-sizeof(uint64_t)]);
-				size_t index_size = block_size_ - filter_size - sizeof(uint64_t);
+//				size_t index_size = block_size_ - filter_size - sizeof(uint64_t);
 //				printf("FILTER block_size %lu filter_size %lu index_size %lu\n", block_size_, filter_size, index_size);
 				assert(used_buf_ != heap_buf_.get());
 				heap_buf_ = AllocateBlock(filter_size, memory_allocator_);
 				memcpy(heap_buf_.get(), used_buf_, filter_size);
 				*contents_ = BlockContents(std::move(heap_buf_), filter_size);
-				
-				if(index_size > 0){
-					heap_buf_ = AllocateBlock(index_size, memory_allocator_);
-					memcpy(heap_buf_.get(), &used_buf_[filter_size], index_size);
-					*contents_2_ = BlockContents(std::move(heap_buf_), index_size);
-				}
-				else{
-					*contents_2_ = BlockContents(Slice());
-				}
 				check = 1;
 			}
 			else if(block_type_ == BlockType::kIndex){
@@ -248,17 +239,12 @@ inline void BlockFetcher::GetBlockContents() {
 					heap_buf_ = AllocateBlock(filter_size, memory_allocator_);
 					memcpy(heap_buf_.get(), used_buf_, filter_size);
 					*contents_ = BlockContents(std::move(heap_buf_), filter_size);
-					*contents_2_ = BlockContents(Slice());
 					check = 1;
 				}
 				else{
 					heap_buf_ = AllocateBlock(index_size, memory_allocator_);
 					memcpy(heap_buf_.get(), &used_buf_[filter_size], index_size);
 					*contents_ = BlockContents(std::move(heap_buf_), index_size);
-					
-					heap_buf_ = AllocateBlock(filter_size, memory_allocator_);
-					memcpy(heap_buf_.get(), used_buf_, filter_size);
-					*contents_2_ = BlockContents(std::move(heap_buf_), filter_size);
 					check = 1;
 				}
 			}
@@ -278,22 +264,12 @@ inline void BlockFetcher::GetBlockContents() {
 //				printf("6 f %d\n", (int)block_type_);
 				if(block_type_ == BlockType::kFilter){
 					size_t filter_size = DecodeFixed64(&used_buf_[block_size_-sizeof(uint64_t)]);
-					size_t index_size = block_size_ - filter_size - sizeof(uint64_t);
+//					size_t index_size = block_size_ - filter_size - sizeof(uint64_t);
 //					printf("FILTER block_size %lu filter_size %lu index_size %lu\n", block_size_, filter_size, index_size);
 					assert(used_buf_ != heap_buf_.get());
 					heap_buf_ = AllocateBlock(filter_size, memory_allocator_);
 					memcpy(heap_buf_.get(), used_buf_, filter_size);
 					*contents_ = BlockContents(std::move(heap_buf_), filter_size);
-
-					if(index_size > 0){
-						heap_buf_ = AllocateBlock(index_size, memory_allocator_);
-						memcpy(heap_buf_.get(), &used_buf_[filter_size], index_size);
-						*contents_2_ = BlockContents(std::move(heap_buf_), index_size);
-					}
-					else{
-						*contents_2_ = BlockContents(Slice());
-					}
-
 					check = 1;
 				}
 				else if(block_type_ == BlockType::kIndex){
@@ -306,17 +282,12 @@ inline void BlockFetcher::GetBlockContents() {
 						heap_buf_ = AllocateBlock(filter_size, memory_allocator_);
 						memcpy(heap_buf_.get(), used_buf_, filter_size);
 						*contents_ = BlockContents(std::move(heap_buf_), filter_size);
-						*contents_2_ = BlockContents(Slice());
 						check = 1;
 					}
 					else{
 						heap_buf_ = AllocateBlock(index_size, memory_allocator_);
 						memcpy(heap_buf_.get(), &used_buf_[filter_size], index_size);
 						*contents_ = BlockContents(std::move(heap_buf_), index_size);
-
-						heap_buf_ = AllocateBlock(filter_size, memory_allocator_);
-						memcpy(heap_buf_.get(), used_buf_, filter_size);
-						*contents_2_ = BlockContents(std::move(heap_buf_), filter_size);
 						check = 1;
 					}
 				}

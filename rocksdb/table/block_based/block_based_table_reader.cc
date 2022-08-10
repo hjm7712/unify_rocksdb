@@ -1576,8 +1576,9 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
 	  const bool do_uncompress = maybe_compressed && !block_cache_compressed;
       CompressionType raw_block_comp_type;
       BlockContents raw_block_contents;
-	  BlockContents raw_block_contents_2;
-	  BlockContents* contents_2;
+//	  BlockContents raw_block_contents_2;
+//	  bool get_unify = false;
+//	  BlockContents* contents_2;
 
 	  if (!contents) {
         Histograms histogram = for_compaction ? READ_BLOCK_COMPACTION_MICROS
@@ -1589,13 +1590,11 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
             maybe_compressed, block_type, uncompression_dict,
             rep_->persistent_cache_options,
             GetMemoryAllocator(rep_->table_options),
-            GetMemoryAllocatorForCompressedBlock(rep_->table_options),
-			false /* for compaction */,
-			&raw_block_contents_2);
+            GetMemoryAllocatorForCompressedBlock(rep_->table_options));
         s = block_fetcher.ReadBlockContents();
         raw_block_comp_type = block_fetcher.get_compression_type();
         contents = &raw_block_contents;
-		contents_2 = &raw_block_contents_2;
+//		contents_2 = &raw_block_contents_2;
         if (get_context) {
           switch (block_type) {
             case BlockType::kIndex:
@@ -1619,7 +1618,7 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
       if (s.ok()) {
         // If filling cache is allowed and a cache is configured, try to put the
         // block to the cache.
-		if(contents_2->data.size() > 0){
+/*		if(get_unify == true){
 			CacheKey tmp_key_data;
 			Slice tmp_key;
 			BlockType tmp_block_type;
@@ -1639,7 +1638,7 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
 					raw_block_comp_type, uncompression_dict,
 					GetMemoryAllocator(rep_->table_options), tmp_block_type, get_context);
 		}
-
+*/
 
         s = PutDataBlockToCache(
             key, block_cache, block_cache_compressed, block_entry, contents,
