@@ -1989,8 +1989,6 @@ void Version::Get(const ReadOptions& read_options, const LookupKey& k,
 //		printf("Get\n");
 //	}
 
-  printf("Get start\n");
-
   Slice ikey = k.internal_key();
   Slice user_key = k.user_key();
   
@@ -2082,7 +2080,6 @@ void Version::Get(const ReadOptions& read_options, const LookupKey& k,
         // TODO: update per-level perfcontext user_key_return_count for kMerge
         break;
       case GetContext::kFound:
-		printf("Found\n");
         if (fp.GetHitFileLevel() == 0) {
           RecordTick(db_statistics_, GET_HIT_L0);
         } else if (fp.GetHitFileLevel() == 1) {
@@ -2137,7 +2134,6 @@ void Version::Get(const ReadOptions& read_options, const LookupKey& k,
     }
     f = fp.GetNextFile();
   }
-  printf("Not Found\n");
   if (db_statistics_ != nullptr) {
     get_context.ReportCounters();
   }

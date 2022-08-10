@@ -49,7 +49,8 @@ class BlockFetcher {
                const PersistentCacheOptions& cache_options /* ref retained */,
                MemoryAllocator* memory_allocator = nullptr,
                MemoryAllocator* memory_allocator_compressed = nullptr,
-               bool for_compaction = false)
+               bool for_compaction = false,
+               BlockContents* contents_2 = nullptr)
       : file_(file),
         prefetch_buffer_(prefetch_buffer),
         footer_(footer),
@@ -66,7 +67,8 @@ class BlockFetcher {
         cache_options_(cache_options),
         memory_allocator_(memory_allocator),
         memory_allocator_compressed_(memory_allocator_compressed),
-        for_compaction_(for_compaction) {
+        for_compaction_(for_compaction),
+   		contents_2_(contents_2)	{
     io_status_.PermitUncheckedError();  // TODO(AR) can we improve on this?
   }
 
@@ -123,6 +125,8 @@ class BlockFetcher {
   bool got_from_prefetch_buffer_ = false;
   CompressionType compression_type_;
   bool for_compaction_ = false;
+  // BIG SSD
+  BlockContents* contents_2_;
 
   // return true if found
   bool TryGetUncompressBlockFromPersistentCache();

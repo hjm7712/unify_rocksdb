@@ -332,28 +332,30 @@ Status PartitionedIndexBuilder::Finish(
 }
 
 // BIG SSD
-Slice PartitionedIndexBuilder::Finish_Unify(
-    IndexBlocks* index_blocks, const BlockHandle& /*last_partition_block_handle*/, size_t /*order*/) {
+Status PartitionedIndexBuilder::Finish_Unify(
+    IndexBlocks* index_blocks, const BlockHandle& /*last_partition_block_handle*/, Slice* index_data) {
   if (partition_cnt_ == 0) {
     partition_cnt_ = entries_.size();
   }
- 
-  if(UNLIKELY(entries_.empty())){
-//	  if (seperator_is_key_plus_seq_) {
-//		  return index_blocks->index_block_contents =index_block_builder_.Finish();
-//	  } else {
-//		  return index_blocks->index_block_contents =index_block_builder_without_seq_.Finish();
-//	  }
+
+  assert(sub_index_builder_ == nullptr);
+  if(finishing_indexes == true){
+	  entries_.pop_front();
+  }
+
+  if(entries_.empty()){
 	  index_blocks->index_block_contents = Slice();
-	  return index_blocks->index_block_contents;
+	  *index_data = index_blocks->index_block_contents;
+	  return Status::Incomplete();
   }
 
   Entry& entry = entries_.front();
   entry.value->seperator_is_key_plus_seq_ = seperator_is_key_plus_seq_;
   auto s = entry.value->Finish(index_blocks);
   index_size_ += index_blocks->index_block_contents.size();
-  entries_.pop_front();
-  return index_blocks->index_block_contents;
+  *index_data = index_blocks->index_block_contents;
+  finishing_indexes = true;
+  return Status::Incomplete();
 /*
   if(order == partition_cnt_){
 	  return Slice();

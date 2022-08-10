@@ -50,7 +50,6 @@ InternalIteratorBase<IndexValue>* PartitionIndexReader::NewIterator(
     BlockCacheLookupContext* lookup_context) {
   const bool no_io = (read_options.read_tier == kBlockCacheTier);
   CachableEntry<Block> index_block;
-  printf("top level index\n");
   const Status s =
       GetOrReadIndexBlock(no_io, get_context, lookup_context, &index_block);
   if (!s.ok()) {
@@ -92,31 +91,14 @@ InternalIteratorBase<IndexValue>* PartitionIndexReader::NewIterator(
 
     // We don't return pinned data from index blocks, so no need
     // to set `block_contents_pinned`.
-	size_t block_size = index_block.GetValue()->size();
-	size_t filter_size = DecodeFixed64(&index_block.GetValue()->data()[block_size-8]);
-	size_t index_size = block_size - filter_size - sizeof(uint64_t);
-	printf("block %lu filter %lu index %lu\n", block_size, filter_size, index_size);
-	
-	std::unique_ptr<char[]> tmp_buf(new char[filter_size]);
-	memcpy(tmp_buf.get(), index_block.GetValue()->data(), filter_size);
-	
-	BlockContents contents(std::move(tmp_buf), filter_size);
-	Block tmp_block(std::move(contents));
-    
-	std::unique_ptr<InternalIteratorBase<IndexValue>> index_iter(
-        tmp_block.NewIndexIterator(
-            internal_comparator()->user_comparator(),
-            rep->get_global_seqno(BlockType::kIndex), nullptr, kNullStats, true,
-            index_has_first_key(), index_key_includes_seq(),
-            index_value_is_full()));
-/*
+
     std::unique_ptr<InternalIteratorBase<IndexValue>> index_iter(
         index_block.GetValue()->NewIndexIterator(
             internal_comparator()->user_comparator(),
             rep->get_global_seqno(BlockType::kIndex), nullptr, kNullStats, true,
             index_has_first_key(), index_key_includes_seq(),
             index_value_is_full()));
-*/
+
     it = new PartitionedIndexIterator(
         table(), ro, *internal_comparator(), std::move(index_iter),
         lookup_context ? lookup_context->caller
@@ -153,22 +135,12 @@ Status PartitionIndexReader::CacheDependencies(const ReadOptions& ro,
 
   // We don't return pinned data from index blocks, so no need
   // to set `block_contents_pinned`.
-  size_t block_size = index_block.GetValue()->size();
-  size_t filter_size = DecodeFixed64(&index_block.GetValue()->data()[block_size-8]);
-  printf("block %lu filter %lu\n", block_size, filter_size);
-  BlockContents contents = BlockContents(Slice(index_block.GetValue()->data(), filter_size));
-  Block tmp_block = Block(std::move(contents));
 
-  tmp_block.NewIndexIterator(
+  index_block.GetValue()->NewIndexIterator(
       internal_comparator()->user_comparator(),
       rep->get_global_seqno(BlockType::kIndex), &biter, kNullStats, true,
       index_has_first_key(), index_key_includes_seq(), index_value_is_full());
 
-/*  index_block.GetValue()->NewIndexIterator(
-      internal_comparator()->user_comparator(),
-      rep->get_global_seqno(BlockType::kIndex), &biter, kNullStats, true,
-      index_has_first_key(), index_key_includes_seq(), index_value_is_full());
-*/
   // Index partitions are assumed to be consecuitive. Prefetch them all.
   // Read the first block offset
   biter.SeekToFirst();

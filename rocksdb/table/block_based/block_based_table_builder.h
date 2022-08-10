@@ -129,8 +129,8 @@ class BlockBasedTableBuilder : public TableBuilder {
                      bool is_top_level_filter_block = false);
 
   // BIG SSD
-  void WriteRawBlock_Unify(const Slice& unify_contents, 
-		  		const Slice& filter_block_content, 
+  void WriteRawBlock_Unify(const Slice& index_contents, 
+		  		const Slice& filter_content, 
 		  		CompressionType, BlockHandle* handle,
                 BlockType block_type, const Slice* raw_data = nullptr,
                 bool is_top_level_filter_block = false);

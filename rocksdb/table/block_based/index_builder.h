@@ -93,11 +93,11 @@ class IndexBuilder {
   }
 
   // BIG SSD
-  inline Slice Finish_Unify(IndexBlocks* index_blocks, size_t order) {
+  inline Status Finish_Unify(IndexBlocks* index_blocks, Slice* index_data) {
 	  // Throw away the changes to last_partition_block_handle. It has no effect
 	  // on the first call to Finish anyway.
 	  BlockHandle last_partition_block_handle;
-	  return Finish_Unify(index_blocks, last_partition_block_handle, order);
+	  return Finish_Unify(index_blocks, last_partition_block_handle, index_data);
   }
 
 
@@ -116,8 +116,8 @@ class IndexBuilder {
                         const BlockHandle& last_partition_block_handle) = 0;
 
   // BIG SSD
-  virtual Slice Finish_Unify(IndexBlocks* index_blocks,
-                        const BlockHandle& last_partition_block_handle, size_t order) = 0;
+  virtual Status Finish_Unify(IndexBlocks* index_blocks,
+                        const BlockHandle& last_partition_block_handle, Slice* index_data) = 0;
 
 
 
@@ -238,10 +238,10 @@ class ShortenedIndexBuilder : public IndexBuilder {
   }
 
   // BIG SSD
-  virtual Slice Finish_Unify(
+  virtual Status Finish_Unify(
 		  IndexBlocks* /*index_blocks*/,
 		  const BlockHandle& /*last_partition_block_handle*/,
-		  size_t /*order*/) override { return Slice(); }
+		  Slice* /*index_data*/) override { return Status::OK(); }
 
   void Finish_Unify(
 		  IndexBlocks* index_blocks) { 
@@ -374,10 +374,10 @@ class HashIndexBuilder : public IndexBuilder {
   }
 
   // BIG SSD
-  virtual Slice Finish_Unify(
+  virtual Status Finish_Unify(
 		  IndexBlocks* /*index_blocks*/,
 		  const BlockHandle& /*last_partition_block_handle*/,
-		  size_t /*order*/) override { return Slice(); }
+		  Slice* /*index_data*/) override { return Status::OK(); }
 
 
   virtual size_t IndexSize() const override {
@@ -457,10 +457,10 @@ class PartitionedIndexBuilder : public IndexBuilder {
       const BlockHandle& last_partition_block_handle) override;
 
   // BIG SSD
-  virtual Slice Finish_Unify(
+  virtual Status Finish_Unify(
       IndexBlocks* index_blocks,
       const BlockHandle& /*last_partition_block_handle*/,
-	  size_t order) override;
+	  Slice* index_data) override;
 
   virtual size_t IndexSize() const override { return index_size_; }
   size_t TopLevelIndexSize(uint64_t) const { return top_level_index_size_; }

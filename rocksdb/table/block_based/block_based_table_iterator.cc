@@ -21,10 +21,8 @@ void BlockBasedTableIterator::SeekImpl(const Slice* target) {
     return;
   }
 
-  printf("q\n");
   bool need_seek_index = true;
   if (block_iter_points_to_real_block_ && block_iter_.Valid()) {
-  printf("r\n");
     // Reseek.
     prev_block_offset_ = index_iter_->value().handle.offset();
 
@@ -46,17 +44,14 @@ void BlockBasedTableIterator::SeekImpl(const Slice* target) {
     }
   }
 
-  printf("s\n");
   if (need_seek_index) {
     if (target) {
       index_iter_->Seek(*target);
     } else {
-  printf("t\n");
       index_iter_->SeekToFirst();
     }
 
     if (!index_iter_->Valid()) {
-  printf("u\n");
       ResetDataIter();
       return;
     }
@@ -69,7 +64,6 @@ void BlockBasedTableIterator::SeekImpl(const Slice* target) {
   if (!v.first_internal_key.empty() && !same_block &&
       (!target || icomp_.Compare(*target, v.first_internal_key) <= 0) &&
       allow_unprepared_value_) {
-  printf("v\n");
     // Index contains the first key of the block, and it's >= target.
     // We can defer reading the block.
     is_at_first_key_from_index_ = true;
@@ -80,10 +74,8 @@ void BlockBasedTableIterator::SeekImpl(const Slice* target) {
   } else {
     // Need to use the data block.
     if (!same_block) {
-  printf("w\n");
       InitDataBlock();
     } else {
-  printf("x\n");
       // When the user does a reseek, the iterate_upper_bound might have
       // changed. CheckDataBlockWithinUpperBound() needs to be called
       // explicitly if the reseek ends up in the same data block.
@@ -95,10 +87,8 @@ void BlockBasedTableIterator::SeekImpl(const Slice* target) {
     if (target) {
       block_iter_.Seek(*target);
     } else {
-  printf("y\n");
       block_iter_.SeekToFirst();
     }
-  printf("z\n");
     FindKeyForward();
   }
 
@@ -226,6 +216,7 @@ void BlockBasedTableIterator::Prev() {
 
 void BlockBasedTableIterator::InitDataBlock() {
   BlockHandle data_block_handle = index_iter_->value().handle;
+//  printf("data block %lu %lu\n", data_block_handle.offset(), data_block_handle.size());
   if (!block_iter_points_to_real_block_ ||
       data_block_handle.offset() != prev_block_offset_ ||
       // if previous attempt of reading the block missed cache, try again

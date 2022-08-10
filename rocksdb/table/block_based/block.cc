@@ -507,9 +507,7 @@ void MetaBlockIter::SeekForPrevImpl(const Slice& target) {
 }
 
 void DataBlockIter::SeekToFirstImpl() {
-	printf("seek data\n");
   if (data_ == nullptr) {  // Not init yet
-	  printf("no data\n");
     return;
   }
   SeekToRestartPoint(0);
@@ -527,7 +525,6 @@ void MetaBlockIter::SeekToFirstImpl() {
 }
 
 void IndexBlockIter::SeekToFirstImpl() {
-	printf("seek index\n");
   if (data_ == nullptr) {  // Not init yet
     return;
   }
@@ -990,6 +987,7 @@ Block::Block(BlockContents&& contents, size_t read_amp_bytes_per_bit,
   } else {
     // Should only decode restart points for uncompressed blocks
     num_restarts_ = NumRestarts();
+//	printf("Make block num restarts %u\n", num_restarts_);
     switch (IndexType()) {
       case BlockBasedTableOptions::kDataBlockBinarySearch:
         restart_offset_ = static_cast<uint32_t>(size_) -
@@ -1098,7 +1096,6 @@ IndexBlockIter* Block::NewIndexIterator(
     ret_iter->Invalidate(Status::Corruption("INDEX bad block contents"));
     return ret_iter;
   }
-  printf("num restart %u\n", num_restarts_ );
   if (num_restarts_ == 0) {
     // Empty block.
     ret_iter->Invalidate(Status::OK());
@@ -1106,7 +1103,6 @@ IndexBlockIter* Block::NewIndexIterator(
   } else {
     BlockPrefixIndex* prefix_index_ptr =
         total_order_seek ? nullptr : prefix_index;
-	printf("block %p\n", data_);
     ret_iter->Initialize(raw_ucmp, data_, restart_offset_, num_restarts_,
                          global_seqno, prefix_index_ptr, have_first_key,
                          key_includes_seq, value_is_full,

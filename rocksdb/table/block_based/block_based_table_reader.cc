@@ -1505,10 +1505,6 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
   Cache* block_cache_compressed =
       rep_->table_options.block_cache_compressed.get();
 
-  if(block_type == BlockType::kData){
-	  printf("Get data block\n");
-  }
-
   // First, try to get the block from the cache
   //
   // If either block cache is enabled, we'll try to read from it.
@@ -1519,9 +1515,17 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
 
   if (block_cache != nullptr || block_cache_compressed != nullptr) {
     // create key for block cache
-	key_data = GetCacheKey(rep_->base_cache_key, handle);
-	key = key_data.AsSlice();
-    
+	  if(block_type == BlockType::kFilter){
+		  key_data = GetCacheKey(rep_->base_cache_key, handle);
+	  }
+	  else if(block_type == BlockType::kIndex){
+		  key_data = rep_->base_cache_key.WithOffset((handle.offset() + handle.size() / 2) >> 2);
+	  }
+	  else{
+		  key_data = GetCacheKey(rep_->base_cache_key, handle);
+	  }
+	  key = key_data.AsSlice();
+	  
 	if (!contents) {
       s = GetDataBlockFromCache(key, block_cache, block_cache_compressed, ro,
                                 block_entry, uncompression_dict, block_type,
@@ -1529,7 +1533,6 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
       // Value could still be null at this point, so check the cache handle
       // and update the read pattern for prefetching
       if (block_entry->GetValue() || block_entry->GetCacheHandle()) {
-//		  printf("get from cache %d size %lu\n", (int)block_type, handle.size());
         // TODO(haoyu): Differentiate cache hit on uncompressed block cache and
         // compressed block cache.
         is_cache_hit = true;
@@ -1573,6 +1576,8 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
 	  const bool do_uncompress = maybe_compressed && !block_cache_compressed;
       CompressionType raw_block_comp_type;
       BlockContents raw_block_contents;
+	  BlockContents raw_block_contents_2;
+	  BlockContents* contents_2;
 
 	  if (!contents) {
         Histograms histogram = for_compaction ? READ_BLOCK_COMPACTION_MICROS
@@ -1584,10 +1589,13 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
             maybe_compressed, block_type, uncompression_dict,
             rep_->persistent_cache_options,
             GetMemoryAllocator(rep_->table_options),
-            GetMemoryAllocatorForCompressedBlock(rep_->table_options));
+            GetMemoryAllocatorForCompressedBlock(rep_->table_options),
+			false /* for compaction */,
+			&raw_block_contents_2);
         s = block_fetcher.ReadBlockContents();
         raw_block_comp_type = block_fetcher.get_compression_type();
         contents = &raw_block_contents;
+		contents_2 = &raw_block_contents_2;
         if (get_context) {
           switch (block_type) {
             case BlockType::kIndex:
@@ -1611,10 +1619,33 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
       if (s.ok()) {
         // If filling cache is allowed and a cache is configured, try to put the
         // block to the cache.
+		if(contents_2->data.size() > 0){
+			CacheKey tmp_key_data;
+			Slice tmp_key;
+			BlockType tmp_block_type;
+
+			if(block_type == BlockType::kFilter){
+				tmp_key_data = rep_->base_cache_key.WithOffset((handle.offset() + handle.size() / 2) >> 2);
+				tmp_block_type = BlockType::kIndex;
+			}
+			if(block_type == BlockType::kIndex){
+				tmp_key_data = GetCacheKey(rep_->base_cache_key, handle);
+				tmp_block_type = BlockType::kFilter;
+			}
+			tmp_key = tmp_key_data.AsSlice();
+
+			s = PutDataBlockToCache(
+					tmp_key, block_cache, block_cache_compressed, block_entry, contents_2,
+					raw_block_comp_type, uncompression_dict,
+					GetMemoryAllocator(rep_->table_options), tmp_block_type, get_context);
+		}
+
+
         s = PutDataBlockToCache(
             key, block_cache, block_cache_compressed, block_entry, contents,
             raw_block_comp_type, uncompression_dict,
             GetMemoryAllocator(rep_->table_options), block_type, get_context);
+
       }
     }
   }
@@ -1991,7 +2022,6 @@ Status BlockBasedTable::RetrieveBlock(
 //  printf("read trigger %d\n", (int)block_type);
   Status s;
   if (use_cache) {
-	  printf("a\n");
     s = MaybeReadBlockAndLoadToCache(
         prefetch_buffer, ro, handle, uncompression_dict, wait_for_cache,
         for_compaction, block_entry, block_type, get_context, lookup_context,
@@ -1999,14 +2029,12 @@ Status BlockBasedTable::RetrieveBlock(
     if (!s.ok()) {
       return s;
     }
-	  printf("c\n");
 
-    if (block_entry->GetValue() != nullptr ||
-        block_entry->GetCacheHandle() != nullptr) {
-	  printf("d\n");
-      assert(s.ok());
-      return s;
-    }
+	if (block_entry->GetValue() != nullptr ||
+			block_entry->GetCacheHandle() != nullptr) {
+		assert(s.ok());
+		return s;
+	}
   }
 
   assert(block_entry->IsEmpty());
@@ -2037,7 +2065,6 @@ Status BlockBasedTable::RetrieveBlock(
         GetMemoryAllocator(rep_->table_options), for_compaction,
         rep_->blocks_definitely_zstd_compressed,
         rep_->table_options.filter_policy.get());
-
     if (get_context) {
       switch (block_type) {
         case BlockType::kIndex:
@@ -2422,7 +2449,6 @@ Status BlockBasedTable::Get(const ReadOptions& read_options, const Slice& key,
     }
 
 	INDEX[gettid()%NUM_THREADS]=1;
-	printf("before index read\n");
     auto iiter =
         NewIndexIterator(read_options, need_upper_bound_check, &iiter_on_stack,
                          get_context, &lookup_context);

@@ -21,8 +21,6 @@ void BlockPrefetcher::PrefetchIfNeeded(const BlockBasedTable::Rep* rep,
         &prefetch_buffer_, false, async_io);
     return;
   }
-
-	  printf("4-2\n");
   // Explicit user requested readahead.
   if (readahead_size > 0) {
     rep->CreateFilePrefetchBufferIfNotExists(

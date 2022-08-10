@@ -209,7 +209,6 @@ void FlushJob::PickMemTable() {
 
 Status FlushJob::Run(LogsWithPrepTracker* prep_tracker, FileMetaData* file_meta,
                      bool* switched_to_mempurge) {
-	printf("Flush START\n");
   TEST_SYNC_POINT("FlushJob::Start");
   db_mutex_->AssertHeld();
   assert(pick_memtable_called);
@@ -274,9 +273,7 @@ Status FlushJob::Run(LogsWithPrepTracker* prep_tracker, FileMetaData* file_meta,
     s = Status::OK();
   } else {
     // This will release and re-acquire the mutex.
-	  printf("before write L0\n");
     s = WriteLevel0Table();
-	  printf("after write L0\n");
   }
 
   if (s.ok() && cfd_->IsDropped()) {
@@ -347,7 +344,6 @@ Status FlushJob::Run(LogsWithPrepTracker* prep_tracker, FileMetaData* file_meta,
            << (IOSTATS(cpu_read_nanos) - prev_cpu_read_nanos);
   }
 
-	printf("Flush END\n");
   return s;
 }
 

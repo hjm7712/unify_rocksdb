@@ -476,7 +476,6 @@ class BlockIter : public InternalIteratorBase<TValue> {
 
     // ParseNextKey() starts at the end of value_, so set value_ accordingly
     uint32_t offset = GetRestartPoint(index);
-	printf("seek %p\n", data_);
     value_ = Slice(data_ + offset, 0);
   }
 

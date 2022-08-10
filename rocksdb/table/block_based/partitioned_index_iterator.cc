@@ -14,7 +14,6 @@ void PartitionedIndexIterator::Seek(const Slice& target) {
 }
 
 void PartitionedIndexIterator::SeekToFirst() { 
-	printf("hihi\n");
 	SeekImpl(nullptr); 
 }
 
@@ -24,9 +23,7 @@ void PartitionedIndexIterator::SeekImpl(const Slice* target) {
   if (target) {
     index_iter_->Seek(*target);
   } else {
-	  printf("before top seek\n");
     index_iter_->SeekToFirst();
-	  printf("after top seek\n");
   }
 
   if (!index_iter_->Valid()) {
@@ -34,19 +31,13 @@ void PartitionedIndexIterator::SeekImpl(const Slice* target) {
     return;
   }
 
-  printf("before init partition\n");
   InitPartitionedIndexBlock();
-  printf("after init partition\n");
   if (target) {
     block_iter_.Seek(*target);
   } else {
-	  printf("before partition seek\n");
     block_iter_.SeekToFirst();
-	  printf("after partition seek\n");
   }
-  printf("before find key\n");
   FindKeyForward();
-  printf("after find key\n");
   // We could check upper bound here, but that would be too complicated
   // and checking index upper bound is less useful than for data blocks.
 
@@ -85,7 +76,6 @@ void PartitionedIndexIterator::Prev() {
 
 void PartitionedIndexIterator::InitPartitionedIndexBlock() {
   BlockHandle partitioned_index_handle = index_iter_->value().handle;
-  printf("index offset %lu size %lu\n", partitioned_index_handle.offset(), partitioned_index_handle.size());
   if (!block_iter_points_to_real_block_ ||
       partitioned_index_handle.offset() != prev_block_offset_ ||
       // if previous attempt of reading the block missed cache, try again
@@ -106,7 +96,6 @@ void PartitionedIndexIterator::InitPartitionedIndexBlock() {
         is_for_compaction, read_options_.async_io);
     Status s;
 
-	printf("index partition block\n");
 	table_->NewDataBlockIterator<IndexBlockIter>(
 			read_options_, partitioned_index_handle, &block_iter_,
 			BlockType::kIndex,
@@ -142,28 +131,19 @@ void PartitionedIndexIterator::FindBlockForward() {
   // TODO the while loop inherits from two-level-iterator. We don't know
   // whether a block can be empty so it can be replaced by an "if".
   do {
-	  printf("1\n");
     if (!block_iter_.status().ok()) {
-		printf("2\n");
       return;
     }
     ResetPartitionedIndexIter();
-		printf("3\n");
     index_iter_->Next();
-		printf("4\n");
 
     if (!index_iter_->Valid()) {
-		printf("5\n");
       return;
     }
 
-		printf("6\n");
     InitPartitionedIndexBlock();
-		printf("7\n");
     block_iter_.SeekToFirst();
-		printf("8\n");
   } while (!block_iter_.Valid());
-  printf("9\n");
 }
 
 void PartitionedIndexIterator::FindKeyBackward() {

@@ -55,6 +55,8 @@
 #include "util/string_util.h"
 #include "util/work_queue.h"
 
+// BIG SSD
+#include "util/crc32c.h"
 extern int NUM_THREADS;
 
 namespace ROCKSDB_NAMESPACE {
@@ -1052,6 +1054,7 @@ void BlockBasedTableBuilder::Add_Unify(const Slice& key, const Slice& value) {
 		r->first_key_in_next_block = &key;
 		Flush();
 		if (r->state == Rep::State::kBuffered) {
+			printf("hihi\n");
 			bool exceeds_buffer_limit =
 				(r->buffer_limit != 0 && r->data_begin_offset > r->buffer_limit);
 			bool exceeds_global_block_cache_limit = false;
@@ -1463,8 +1466,8 @@ void BlockBasedTableBuilder::WriteRawBlock(const Slice& block_contents,
 }
 
 // BIG SSD
-void BlockBasedTableBuilder::WriteRawBlock_Unify(const Slice& unify_contents,
-										   const Slice& filter_block_contents,
+void BlockBasedTableBuilder::WriteRawBlock_Unify(const Slice& index_contents,
+										   const Slice& filter_contents,
                                            CompressionType type,
                                            BlockHandle* handle,
                                            BlockType block_type,
@@ -1476,32 +1479,63 @@ void BlockBasedTableBuilder::WriteRawBlock_Unify(const Slice& unify_contents,
   /////////////////////////////////////////////////////////////////
   Rep* r = rep_;
   StopWatch sw(r->ioptions.clock, r->ioptions.stats, WRITE_RAW_BLOCK_MICROS);
+
+  size_t unify_size = index_contents.size() + filter_contents.size() + sizeof(uint64_t);
   handle->set_offset(r->get_offset());
-  handle->set_size(unify_contents.size());
-//  handle->set_index_offset(r->get_offset() + filter_block_contents.size());
+  handle->set_size(unify_size);
+//  handle->set_index_offset(r->get_offset() + filter_contents.size());
   
   assert(status().ok());
   assert(io_status().ok());
 
-  // partition: filter block + index block + filter_size block
-  // top level: filter block + filter_size block
+  // filter
   {
-    IOStatus io_s = r->file->Append(Slice(unify_contents.data(), unify_contents.size()));
+    IOStatus io_s = r->file->Append(filter_contents);
     if (!io_s.ok()) {
       r->SetIOStatus(io_s);
       return;
     }
   }
 
+  // index
+  if(index_contents.size() > 0) {
+//	  printf("restart %u\n", DecodeFixed32(&index_contents.data()[index_contents.size()-4]));
+	  IOStatus io_s = r->file->Append(index_contents);
+	  if (!io_s.ok()) {
+		  r->SetIOStatus(io_s);
+		  return;
+	  }
+  }
+
+  // filter_size
+  std::array<char, sizeof(uint64_t)> filter_size;
+  EncodeFixed64(filter_size.data(), filter_contents.size());
+  {
+	  IOStatus io_s = r->file->Append(Slice(filter_size.data(), filter_size.size()));
+	  if (!io_s.ok()) {
+		  r->SetIOStatus(io_s);
+		  return;
+	  }
+  }
+
   // trailer
   std::array<char, kBlockTrailerSize> trailer;
   trailer[0] = type;
-  uint32_t checksum = ComputeBuiltinChecksumWithLastByte(
-      r->table_options.checksum, unify_contents.data(), unify_contents.size(),
-      /*last_byte*/ type);
+  
+  uint32_t crc = crc32c::Value(filter_contents.data(), filter_contents.size());
+  if(index_contents.size() > 0){
+	  crc = crc32c::Extend(crc, index_contents.data(), index_contents.size());
+  }
+  crc = crc32c::Extend(crc, filter_size.data(), filter_size.size());
+  crc = crc32c::Extend(crc, trailer.data(), 1);
+  uint32_t checksum = crc32c::Mask(crc);
+
+//  uint32_t checksum = ComputeBuiltinChecksumWithLastByte(
+//      r->table_options.checksum, tmp_block, unify_size,
+//      /*last_byte*/ type);
 
   if (block_type == BlockType::kFilter || block_type == BlockType::kUnify) {
-    Status s = r->filter_builder->MaybePostVerifyFilter(filter_block_contents);
+    Status s = r->filter_builder->MaybePostVerifyFilter(filter_contents);
     if (!s.ok()) {
       r->SetStatus(s);
       return;
@@ -1537,7 +1571,7 @@ void BlockBasedTableBuilder::WriteRawBlock_Unify(const Slice& unify_contents,
     }
     if (warm_cache) {
       if (type == kNoCompression) {
-        s = InsertBlockInCacheHelper(filter_block_contents, handle, block_type,
+        s = InsertBlockInCacheHelper(filter_contents, handle, block_type,
                                      is_top_level_filter_block);
       } else if (raw_block_contents != nullptr) {
         s = InsertBlockInCacheHelper(*raw_block_contents, handle, block_type,
@@ -1550,7 +1584,7 @@ void BlockBasedTableBuilder::WriteRawBlock_Unify(const Slice& unify_contents,
     }
   }
 
-  r->set_offset(r->get_offset() + unify_contents.size() + kBlockTrailerSize);
+  r->set_offset(r->get_offset() + unify_size + kBlockTrailerSize);
 
   if (r->IsParallelCompressionEnabled()) {
 	  r->pc_rep->file_size_estimator.SetEstimatedFileSize(r->get_offset());
@@ -1836,7 +1870,6 @@ void BlockBasedTableBuilder::WriteUnifyBlock(
     rep_->props.num_filter_entries +=
         rep_->filter_builder->EstimateEntriesAdded();
     Status s = Status::Incomplete();
-	size_t order = 0;
     while (ok() && s.IsIncomplete()) {
       // filter_data is used to store the transferred filter data payload from
       // FilterBlockBuilder and deallocate the payload by going out of scope.
@@ -1869,69 +1902,26 @@ void BlockBasedTableBuilder::WriteUnifyBlock(
         top_level_filter_block = true;
       }
 
-	  //		  unsigned long long start, end_1, end_2, lo, hi;
-	  //		  asm volatile("rdtsc" : "=a" (lo), "=d" (hi));
-	  //		  start = ((unsigned long long)hi << 32) | lo;
-
-	  Slice index_content = rep_->index_builder->Finish_Unify(&index_blocks, order++);
+//	  char filter_size[sizeof(uint64_t)];
 	
-/*	  printf("slice index\n");
-	  for(int i=0;i<4; i++){
-		  printf("%d ", index_content.data()[index_content.size()-4+i]);
-	  }
-	  printf("\n");
-*/
-	  if(top_level_filter_block == true){
-		  assert(index_content.size() == 0);
-	  }
-	  //		  asm volatile("rdtsc" : "=a" (lo), "=d" (hi));
-	  //		  end_1 = ((unsigned long long)hi << 32) | lo;
+	  Slice index_content;
+	  auto i_s = rep_->index_builder->Finish_Unify(&index_blocks, &index_content);
 
-	  char* tmp_index = new char[index_content.size()];
-	  memcpy(tmp_index, index_content.data(), sizeof(char)*index_content.size());
-	  
-/*	  printf("tmp index\n");
-	  for(int i=0;i<4; i++){
-		  printf("%d ", tmp_index[index_content.size()-4+i]);
-	  }
-	  printf("\n");
-*/
-	  std::string s_filter_content;
-	  s_filter_content.assign(filter_content.data(), filter_content.size());
+//	  char* tmp_index = new char[index_content.size()];
+//	  memcpy(tmp_index, index_content.data(), sizeof(char)*index_content.size());
+//	  std::string s_index_content(tmp_index, tmp_index + index_content.size());
 
-	  std::string s_index_content;
-	  s_index_content.assign(tmp_index, index_content.size());
+//	  char* tmp_filter = new char[filter_content.size()];
+//	  memcpy(tmp_filter, filter_content.data(), sizeof(char)*filter_content.size());
+//	  std::string s_filter_content(tmp_filter, tmp_filter + filter_content.size());
+	
+//	  EncodeFixed64(filter_size, filter_content.size());
+//	  std::string s_filter_size(filter_size, filter_size + sizeof(uint64_t));
 
-/*	  printf("string index\n");
-	  for(int i=0;i<4; i++){
-		  printf("%d ", s_index_content.c_str()[index_content.size()-4+i]);
-	  }
-	  printf("\n");
-*/
-	  std::array<char, sizeof(uint64_t)> filter_size;
-	  EncodeFixed64(filter_size.data(), filter_content.size());
-	  std::string s_filter_size;
-	  s_filter_size.assign(filter_size.data(), sizeof(uint64_t));
+//	  std::string s_unify_content = s_filter_content + s_index_content + s_filter_size;
+//	  Slice unify_content(s_unify_content.c_str(), s_unify_content.size());
 
-	  std::string s_unify_content;// = s_filter_content + s_index_content + s_filter_size;
-	  s_unify_content.append(s_filter_content).append(s_index_content).append(s_filter_size);
-	  Slice unify_content(s_unify_content.c_str(), s_unify_content.length());
-
-/*	  printf("write unify\n");
-	  for(int i=0;i<4; i++){
-		  printf("%d ", unify_content.data()[unify_content.size()-8-4+i]);
-	  }
-	  printf("\n");
-*/
-	  //		  asm volatile("rdtsc" : "=a" (lo), "=d" (hi));          
-	  //		  end_2 = ((unsigned long long)hi << 32) | lo;
-
-	  //		  printf("latency %llu %llu\n", (end_1-start)/2600, (end_2-end_1)/2600);
-
-	  //		  printf("filter %ld index %ld sum %ld\n", filter_content.size(), index_content.size(), filter_content.size() + index_content.size());
-	  //		  printf("unify %ld\n", unify_content.size());
-
-	  WriteRawBlock_Unify(unify_content, filter_content,
+	  WriteRawBlock_Unify(index_content, filter_content,
 			  kNoCompression, unify_block_handle,
 			  BlockType::kUnify, nullptr /*raw_contents*/,
 			  top_level_filter_block);
