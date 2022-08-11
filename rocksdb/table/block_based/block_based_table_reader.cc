@@ -79,6 +79,10 @@ std::atomic<int> INDEX_HIT_COUNT, INDEX_MISS_COUNT;
 std::atomic<int> DATA_HIT_COUNT, DATA_MISS_COUNT;
 extern unsigned long long FILTER[64], INDEX[64], DATA[64];
 extern int NUM_THREADS;
+extern char unify_contents[4096];
+extern size_t unify_size;
+size_t unify_offset;
+
 
 namespace ROCKSDB_NAMESPACE {
 
@@ -1505,6 +1509,7 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
   Cache* block_cache_compressed =
       rep_->table_options.block_cache_compressed.get();
 
+//  printf("Get block type %d\n", (int)block_type);
   // First, try to get the block from the cache
   //
   // If either block cache is enabled, we'll try to read from it.
@@ -1515,10 +1520,7 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
 
   if (block_cache != nullptr || block_cache_compressed != nullptr) {
     // create key for block cache
-	  if(block_type == BlockType::kFilter){
-		  key_data = GetCacheKey(rep_->base_cache_key, handle);
-	  }
-	  else if(block_type == BlockType::kIndex){
+	  if(block_type == BlockType::kIndex){
 		  key_data = rep_->base_cache_key.WithOffset((handle.offset() + handle.size() / 2) >> 2);
 	  }
 	  else{
@@ -1527,12 +1529,19 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
 	  key = key_data.AsSlice();
 	  
 	if (!contents) {
+//	  unsigned long long start=0, end=0, lo, hi;
+//	  asm volatile("rdtsc" : "=a" (lo), "=d" (hi));
+//	  start = ((unsigned long long)hi << 32) | lo;
       s = GetDataBlockFromCache(key, block_cache, block_cache_compressed, ro,
                                 block_entry, uncompression_dict, block_type,
                                 wait, get_context);
+//	  asm volatile("rdtsc" : "=a" (lo), "=d" (hi));
+//	  end = ((unsigned long long)hi << 32) | lo;
+//	  printf("get cache time %llu\n", (end-start)/2600);
       // Value could still be null at this point, so check the cache handle
       // and update the read pattern for prefetching
       if (block_entry->GetValue() || block_entry->GetCacheHandle()) {
+//		  printf("get from cache %d %lu\n", (int)block_type,((Block*)(block_entry->GetValue()))->size());
         // TODO(haoyu): Differentiate cache hit on uncompressed block cache and
         // compressed block cache.
         is_cache_hit = true;
@@ -1576,9 +1585,9 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
 	  const bool do_uncompress = maybe_compressed && !block_cache_compressed;
       CompressionType raw_block_comp_type;
       BlockContents raw_block_contents;
-//	  BlockContents raw_block_contents_2;
-//	  bool get_unify = false;
-//	  BlockContents* contents_2;
+	  BlockContents raw_block_contents_2;
+//	  BlockContents* contents_2 = nullptr;
+	  bool get_unify = false;
 
 	  if (!contents) {
         Histograms histogram = for_compaction ? READ_BLOCK_COMPACTION_MICROS
@@ -1590,9 +1599,13 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
             maybe_compressed, block_type, uncompression_dict,
             rep_->persistent_cache_options,
             GetMemoryAllocator(rep_->table_options),
-            GetMemoryAllocatorForCompressedBlock(rep_->table_options));
+            GetMemoryAllocatorForCompressedBlock(rep_->table_options),
+			false /* for compaction */,
+			&raw_block_contents_2);
+//		printf("I/O block type %d\n", (int)block_type);
         s = block_fetcher.ReadBlockContents();
         raw_block_comp_type = block_fetcher.get_compression_type();
+		get_unify = block_fetcher.Is_Get_Unify();
         contents = &raw_block_contents;
 //		contents_2 = &raw_block_contents_2;
         if (get_context) {
@@ -1618,33 +1631,39 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
       if (s.ok()) {
         // If filling cache is allowed and a cache is configured, try to put the
         // block to the cache.
-/*		if(get_unify == true){
+
+		s = PutDataBlockToCache(
+				key, block_cache, block_cache_compressed, block_entry, contents,
+				raw_block_comp_type, uncompression_dict,
+				GetMemoryAllocator(rep_->table_options), block_type, get_context);
+//			printf("after put content %d %lu\n", (int)block_type,(((Block*)block_entry->GetValue())->size()));
+
+		if(get_unify == true){
+			CachableEntry<TBlocklike> tmp_block_entry;
 			CacheKey tmp_key_data;
 			Slice tmp_key;
-			BlockType tmp_block_type;
+			BlockType tmp_block_type = BlockType::kInvalid;
+
+//			CacheAllocationPtr tmp_buf = AllocateBlock(unify_size, GetMemoryAllocator(rep_->table_options));
+//			memcpy(tmp_buf.get(), unify_contents, unify_size);
+			raw_block_contents_2 = BlockContents(Slice(unify_contents, unify_size));
 
 			if(block_type == BlockType::kFilter){
-				tmp_key_data = rep_->base_cache_key.WithOffset((handle.offset() + handle.size() / 2) >> 2);
 				tmp_block_type = BlockType::kIndex;
+				tmp_key_data = rep_->base_cache_key.WithOffset((handle.offset() + handle.size() / 2) >> 2);
 			}
-			if(block_type == BlockType::kIndex){
-				tmp_key_data = GetCacheKey(rep_->base_cache_key, handle);
+			else if(block_type == BlockType::kIndex){
 				tmp_block_type = BlockType::kFilter;
+				tmp_key_data = GetCacheKey(rep_->base_cache_key, handle);
 			}
 			tmp_key = tmp_key_data.AsSlice();
 
 			s = PutDataBlockToCache(
-					tmp_key, block_cache, block_cache_compressed, block_entry, contents_2,
+					tmp_key, block_cache, block_cache_compressed, &tmp_block_entry, &raw_block_contents_2,
 					raw_block_comp_type, uncompression_dict,
 					GetMemoryAllocator(rep_->table_options), tmp_block_type, get_context);
+//			printf("after put content_2 %d %lu\n", (int)tmp_block_type,(((Block*)tmp_block_entry.GetValue())->size()));
 		}
-*/
-
-        s = PutDataBlockToCache(
-            key, block_cache, block_cache_compressed, block_entry, contents,
-            raw_block_comp_type, uncompression_dict,
-            GetMemoryAllocator(rep_->table_options), block_type, get_context);
-
       }
     }
   }

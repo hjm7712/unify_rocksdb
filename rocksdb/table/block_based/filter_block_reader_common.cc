@@ -31,7 +31,7 @@ Status FilterBlockReaderCommon<TBlocklike>::ReadFilterBlock(
   const Status s =
       table->RetrieveBlock(prefetch_buffer, read_options, rep->filter_handle,
                            UncompressionDict::GetEmptyDict(), filter_block,
-                           BlockType::kFilter, get_context, lookup_context,
+                           BlockType::kUnify, get_context, lookup_context,
                            /* for_compaction */ false, use_cache,
                            /* wait_for_cache */ true);
 

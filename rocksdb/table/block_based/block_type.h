@@ -25,7 +25,7 @@ enum class BlockType : uint8_t {
   kHashIndexMetadata,
   kMetaIndex,
   kIndex,
-  kUnify,
+  kUnify,	// Unify or Unify Top
   // Note: keep kInvalid the last value when adding new enum values.
   kInvalid
 };

@@ -26,9 +26,9 @@
 #include "util/compression.h"
 #include "util/stop_watch.h"
 
-char* index_contents;
-size_t index_size;
-extern int UNIFY;
+char unify_contents[4096];
+size_t unify_size = 0;
+extern size_t unify_offset;
 
 namespace ROCKSDB_NAMESPACE {
 
@@ -211,96 +211,83 @@ inline void BlockFetcher::CopyBufferToCompressedBuf() {
 // After this method, if the block is compressed, it should be in
 // compressed_buf_, otherwise should be in heap_buf_.
 inline void BlockFetcher::GetBlockContents() {
-	if (slice_.data() != used_buf_) {
-		// the slice content is not the buffer provided
-		*contents_ = BlockContents(Slice(slice_.data(), block_size_));
-	} else {
-		// page can be either uncompressed or compressed, the buffer either stack
-		// or heap provided. Refer to https://github.com/facebook/rocksdb/pull/4096
-		int check = 0;
-		if (got_from_prefetch_buffer_ || used_buf_ == &stack_buf_[0]) {
-			// here
-			if(block_type_ == BlockType::kFilter){
-				size_t filter_size = DecodeFixed64(&used_buf_[block_size_-sizeof(uint64_t)]);
-//				size_t index_size = block_size_ - filter_size - sizeof(uint64_t);
-//				printf("FILTER block_size %lu filter_size %lu index_size %lu\n", block_size_, filter_size, index_size);
-				assert(used_buf_ != heap_buf_.get());
-				heap_buf_ = AllocateBlock(filter_size, memory_allocator_);
-				memcpy(heap_buf_.get(), used_buf_, filter_size);
-				*contents_ = BlockContents(std::move(heap_buf_), filter_size);
-				check = 1;
-			}
-			else if(block_type_ == BlockType::kIndex){
-				size_t filter_size = DecodeFixed64(&used_buf_[block_size_-sizeof(uint64_t)]);
-				size_t index_size = block_size_ - filter_size - sizeof(uint64_t);
-//				printf("INDEX block_size %lu filter_size %lu index_size %lu\n", block_size_, filter_size, index_size);
-				assert(used_buf_ != heap_buf_.get());
-				if(index_size == 0){
-					heap_buf_ = AllocateBlock(filter_size, memory_allocator_);
-					memcpy(heap_buf_.get(), used_buf_, filter_size);
-					*contents_ = BlockContents(std::move(heap_buf_), filter_size);
-					check = 1;
-				}
-				else{
-					heap_buf_ = AllocateBlock(index_size, memory_allocator_);
-					memcpy(heap_buf_.get(), &used_buf_[filter_size], index_size);
-					*contents_ = BlockContents(std::move(heap_buf_), index_size);
-					check = 1;
-				}
-			}
-			else{
-//		printf("3 c %d\n",(int)block_type_);
-				CopyBufferToHeapBuf();
-			}
-		} else if (used_buf_ == compressed_buf_.get()) {
-			if (compression_type_ == kNoCompression &&
-					memory_allocator_ != memory_allocator_compressed_) {
-				CopyBufferToHeapBuf();
-			} else {
-				heap_buf_ = std::move(compressed_buf_);
-			}
-		} else if (direct_io_buf_.get() != nullptr) {
-			if (compression_type_ == kNoCompression) {
-//				printf("6 f %d\n", (int)block_type_);
-				if(block_type_ == BlockType::kFilter){
-					size_t filter_size = DecodeFixed64(&used_buf_[block_size_-sizeof(uint64_t)]);
-//					size_t index_size = block_size_ - filter_size - sizeof(uint64_t);
-//					printf("FILTER block_size %lu filter_size %lu index_size %lu\n", block_size_, filter_size, index_size);
-					assert(used_buf_ != heap_buf_.get());
-					heap_buf_ = AllocateBlock(filter_size, memory_allocator_);
-					memcpy(heap_buf_.get(), used_buf_, filter_size);
-					*contents_ = BlockContents(std::move(heap_buf_), filter_size);
-					check = 1;
-				}
-				else if(block_type_ == BlockType::kIndex){
-					size_t filter_size = DecodeFixed64(&used_buf_[block_size_-sizeof(uint64_t)]);
-					size_t index_size = block_size_ - filter_size - sizeof(uint64_t);
-//					printf("INDEX block_size %lu filter_size %lu index_size %lu\n", block_size_, filter_size, index_size);
-					
-					assert(used_buf_ != heap_buf_.get());
-					if(index_size == 0){
-						heap_buf_ = AllocateBlock(filter_size, memory_allocator_);
-						memcpy(heap_buf_.get(), used_buf_, filter_size);
-						*contents_ = BlockContents(std::move(heap_buf_), filter_size);
-						check = 1;
-					}
-					else{
-						heap_buf_ = AllocateBlock(index_size, memory_allocator_);
-						memcpy(heap_buf_.get(), &used_buf_[filter_size], index_size);
-						*contents_ = BlockContents(std::move(heap_buf_), index_size);
-						check = 1;
-					}
-				}
-				else{
-					CopyBufferToHeapBuf();
-				}
-			} else {
-				CopyBufferToCompressedBuf();
-				heap_buf_ = std::move(compressed_buf_);
-			}
-		}
+	if(block_type_ == BlockType::kUnify){
+		size_t filter_size = DecodeFixed64(&used_buf_[block_size_-sizeof(uint64_t)]);
+		size_t index_size __attribute__((__unused__)) = block_size_ - filter_size - sizeof(uint64_t);
+		
+		assert(used_buf_ != heap_buf_.get());
+		assert(index_size == 0);
+		// top level
+		get_unify_ = false;
+		heap_buf_ = AllocateBlock(filter_size, memory_allocator_);
+		memcpy(heap_buf_.get(), used_buf_, filter_size);
+		*contents_ = BlockContents(std::move(heap_buf_), filter_size);
+	}
+	else if(block_type_ == BlockType::kFilter){
+		size_t filter_size = DecodeFixed64(&used_buf_[block_size_-sizeof(uint64_t)]);
+		size_t index_size = block_size_ - filter_size - sizeof(uint64_t);
+//		printf("FILTER block_size %lu filter_size %lu index_size %lu\n", block_size_, filter_size, index_size);
+		assert(used_buf_ != heap_buf_.get());
+		assert(index_size > 0);
 
-		if(check == 0){
+		// partition filter
+		get_unify_ = true;
+		heap_buf_ = AllocateBlock(filter_size, memory_allocator_);
+		memcpy(heap_buf_.get(), used_buf_, filter_size);
+		*contents_ = BlockContents(std::move(heap_buf_), filter_size);
+
+		// partition index
+		memcpy(&unify_contents[0], &used_buf_[filter_size], index_size);
+		unify_size = index_size;
+//		heap_buf_2_ = AllocateBlock(index_size, memory_allocator_);
+//		memcpy(heap_buf_2_.get(), &used_buf_[filter_size], index_size);
+//		*contents_2_ = BlockContents(std::move(heap_buf_2_), index_size);
+	}
+	else if(block_type_ == BlockType::kIndex){
+		size_t filter_size = DecodeFixed64(&used_buf_[block_size_-sizeof(uint64_t)]);
+		size_t index_size = block_size_ - filter_size - sizeof(uint64_t);
+//		printf("INDEX block_size %lu filter_size %lu index_size %lu\n", block_size_, filter_size, index_size);
+		assert(used_buf_ != heap_buf_.get());
+		assert(index_size > 0);
+
+		// partition index
+		get_unify_ = true;
+		heap_buf_ = AllocateBlock(index_size, memory_allocator_);
+		memcpy(heap_buf_.get(), &used_buf_[filter_size], index_size);
+		*contents_ = BlockContents(std::move(heap_buf_), index_size);
+
+		// partition filter
+		memcpy(&unify_contents[0], used_buf_, filter_size);
+		unify_size = filter_size;
+
+//		heap_buf_2_ = AllocateBlock(filter_size, memory_allocator_);
+//		memcpy(heap_buf_2_.get(), used_buf_, filter_size);
+//		*contents_2_ = BlockContents(std::move(heap_buf_2_), filter_size);
+	}
+	else{
+		if (slice_.data() != used_buf_) {
+			// the slice content is not the buffer provided
+			*contents_ = BlockContents(Slice(slice_.data(), block_size_));
+		} else {
+			// page can be either uncompressed or compressed, the buffer either stack
+			// or heap provided. Refer to https://github.com/facebook/rocksdb/pull/4096
+			if (got_from_prefetch_buffer_ || used_buf_ == &stack_buf_[0]) {
+				CopyBufferToHeapBuf();
+			} else if (used_buf_ == compressed_buf_.get()) {
+				if (compression_type_ == kNoCompression &&
+						memory_allocator_ != memory_allocator_compressed_) {
+					CopyBufferToHeapBuf();
+				} else {
+					heap_buf_ = std::move(compressed_buf_);
+				}
+			} else if (direct_io_buf_.get() != nullptr) {
+				if (compression_type_ == kNoCompression) {
+					CopyBufferToHeapBuf();
+				} else {
+					CopyBufferToCompressedBuf();
+					heap_buf_ = std::move(compressed_buf_);
+				}
+			}
 			*contents_ = BlockContents(std::move(heap_buf_), block_size_);
 		}
 	}
@@ -412,28 +399,5 @@ IOStatus BlockFetcher::ReadBlockContents() {
 
   return io_status_;
 }
-
-// BIG SSD
-IOStatus BlockFetcher::ReadBlockContents_Unify() {
-/*    
-  compression_type_ = kNoCompression;
-
-  heap_buf_ = AllocateBlock(index_size, memory_allocator_);
-  
-  memcpy(heap_buf_.get(), index_contents, index_size);
-
-  *contents_ = BlockContents(std::move(heap_buf_), index_size);
-
-#ifndef NDEBUG
-  contents_->is_raw_block = true;
-#endif
-*/
-//  GetBlockContents();
-
-//  InsertUncompressedBlockToPersistentCacheIfNeeded();
-
-  return IOStatus::OK();
-}
-
 
 }  // namespace ROCKSDB_NAMESPACE

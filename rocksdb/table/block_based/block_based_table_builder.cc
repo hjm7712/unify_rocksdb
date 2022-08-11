@@ -1521,7 +1521,8 @@ void BlockBasedTableBuilder::WriteRawBlock_Unify(const Slice& index_contents,
   // trailer
   std::array<char, kBlockTrailerSize> trailer;
   trailer[0] = type;
-  
+ 
+  // checksum
   uint32_t crc = crc32c::Value(filter_contents.data(), filter_contents.size());
   if(index_contents.size() > 0){
 	  crc = crc32c::Extend(crc, index_contents.data(), index_contents.size());
