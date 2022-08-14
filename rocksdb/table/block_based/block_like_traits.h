@@ -73,7 +73,8 @@ class BlocklikeTraits<BlockContents> {
   }
 
   static Cache::CacheItemHelper* GetCacheItemHelper(BlockType block_type) {
-    if (block_type == BlockType::kFilter) {
+	  // BIG SSD TEMP
+    if (block_type == BlockType::kFilter || block_type == BlockType::kUnify) {
       return GetCacheItemHelperForRole<
           BlockContents, CacheEntryRole::kDeprecatedFilterBlock>();
     } else {

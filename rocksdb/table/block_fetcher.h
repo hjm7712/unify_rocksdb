@@ -49,8 +49,7 @@ class BlockFetcher {
                const PersistentCacheOptions& cache_options /* ref retained */,
                MemoryAllocator* memory_allocator = nullptr,
                MemoryAllocator* memory_allocator_compressed = nullptr,
-               bool for_compaction = false,
-			   BlockContents* contents_2 = nullptr)
+               bool for_compaction = false)
       : file_(file),
         prefetch_buffer_(prefetch_buffer),
         footer_(footer),
@@ -67,16 +66,12 @@ class BlockFetcher {
         cache_options_(cache_options),
         memory_allocator_(memory_allocator),
         memory_allocator_compressed_(memory_allocator_compressed),
-		for_compaction_(for_compaction),
-		contents_2_(contents_2)	{
+		for_compaction_(for_compaction) {
     io_status_.PermitUncheckedError();  // TODO(AR) can we improve on this?
   }
 
   IOStatus ReadBlockContents();
-  // BIG SSD
-  bool Is_Get_Unify(){
-	  return get_unify_;
-  }
+  IOStatus ReadUnifyContents();
   inline CompressionType get_compression_type() const {
     return compression_type_;
   }
@@ -123,17 +118,11 @@ class BlockFetcher {
   char* used_buf_ = nullptr;
   AlignedBuf direct_io_buf_;
   CacheAllocationPtr heap_buf_;
-  // BIG SSD
-  CacheAllocationPtr heap_buf_2_;
-
   CacheAllocationPtr compressed_buf_;
   char stack_buf_[kDefaultStackBufferSize];
   bool got_from_prefetch_buffer_ = false;
   CompressionType compression_type_;
   bool for_compaction_ = false;
-  // BIG SSD
-  BlockContents* contents_2_;
-  bool get_unify_ = false;
 
   // return true if found
   bool TryGetUncompressBlockFromPersistentCache();

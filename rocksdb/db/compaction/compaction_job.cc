@@ -2323,7 +2323,6 @@ Status CompactionJob::FinishCompactionOutputFile(
       assert(lower_bound == nullptr ||
              ucmp->Compare(*lower_bound, kv.second) < 0);
       // Range tombstone is not supported by output validator yet.
-	  // BIG SSD TEMP
       sub_compact->builder->Add(kv.first.Encode(), kv.second);
       InternalKey smallest_candidate = std::move(kv.first);
       if (lower_bound != nullptr &&
@@ -2663,7 +2662,8 @@ Status CompactionJob::FinishCompactionOutputFile_Unify(
       assert(lower_bound == nullptr ||
              ucmp->Compare(*lower_bound, kv.second) < 0);
       // Range tombstone is not supported by output validator yet.
-      sub_compact->builder->Add(kv.first.Encode(), kv.second);
+	  // BIG SSD TEMP
+      sub_compact->builder->Add_Unify(kv.first.Encode(), kv.second);
       InternalKey smallest_candidate = std::move(kv.first);
       if (lower_bound != nullptr &&
           ucmp->Compare(smallest_candidate.user_key(), *lower_bound) <= 0) {

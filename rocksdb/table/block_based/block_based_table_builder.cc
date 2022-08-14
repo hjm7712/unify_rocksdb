@@ -58,6 +58,7 @@
 // BIG SSD
 #include "util/crc32c.h"
 extern int NUM_THREADS;
+extern size_t unify_handle_offset;
 
 namespace ROCKSDB_NAMESPACE {
 
@@ -1483,6 +1484,9 @@ void BlockBasedTableBuilder::WriteRawBlock_Unify(const Slice& index_contents,
   size_t unify_size = index_contents.size() + filter_contents.size() + sizeof(uint64_t);
   handle->set_offset(r->get_offset());
   handle->set_size(unify_size);
+  if(handle->offset() == unify_handle_offset){
+	  unify_handle_offset = -1;
+  }
 //  handle->set_index_offset(r->get_offset() + filter_contents.size());
   
   assert(status().ok());
@@ -1511,7 +1515,7 @@ void BlockBasedTableBuilder::WriteRawBlock_Unify(const Slice& index_contents,
   std::array<char, sizeof(uint64_t)> filter_size;
   EncodeFixed64(filter_size.data(), filter_contents.size());
   {
-	  IOStatus io_s = r->file->Append(Slice(filter_size.data(), filter_size.size()));
+	  IOStatus io_s = r->file->Append(Slice(filter_size.data(), sizeof(uint64_t)));
 	  if (!io_s.ok()) {
 		  r->SetIOStatus(io_s);
 		  return;
@@ -1527,7 +1531,7 @@ void BlockBasedTableBuilder::WriteRawBlock_Unify(const Slice& index_contents,
   if(index_contents.size() > 0){
 	  crc = crc32c::Extend(crc, index_contents.data(), index_contents.size());
   }
-  crc = crc32c::Extend(crc, filter_size.data(), filter_size.size());
+  crc = crc32c::Extend(crc, filter_size.data(), sizeof(uint64_t));
   crc = crc32c::Extend(crc, trailer.data(), 1);
   uint32_t checksum = crc32c::Mask(crc);
 

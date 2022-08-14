@@ -79,10 +79,11 @@ std::atomic<int> INDEX_HIT_COUNT, INDEX_MISS_COUNT;
 std::atomic<int> DATA_HIT_COUNT, DATA_MISS_COUNT;
 extern unsigned long long FILTER[64], INDEX[64], DATA[64];
 extern int NUM_THREADS;
-extern char unify_contents[4096];
-extern size_t unify_size;
-size_t unify_offset;
-
+char unify_contents[4096];
+size_t unify_size = -1;
+size_t unify_handle_offset = -1;
+int unify_get;
+extern int t_id;
 
 namespace ROCKSDB_NAMESPACE {
 
@@ -1202,7 +1203,8 @@ Status BlockBasedTable::GetDataBlockFromCache(
       rep_->table_options.cache_index_and_filter_blocks_with_high_priority &&
               (block_type == BlockType::kFilter ||
                block_type == BlockType::kCompressionDictionary ||
-               block_type == BlockType::kIndex)
+               block_type == BlockType::kIndex ||
+               block_type == BlockType::kUnify )
           ? Cache::Priority::HIGH
           : Cache::Priority::LOW;
 
@@ -1331,7 +1333,8 @@ Status BlockBasedTable::PutDataBlockToCache(
       rep_->table_options.cache_index_and_filter_blocks_with_high_priority &&
               (block_type == BlockType::kFilter ||
                block_type == BlockType::kCompressionDictionary ||
-               block_type == BlockType::kIndex)
+               block_type == BlockType::kIndex ||
+               block_type == BlockType::kUnify )
           ? Cache::Priority::HIGH
           : Cache::Priority::LOW;
   assert(cached_block);
@@ -1411,6 +1414,7 @@ Status BlockBasedTable::PutDataBlockToCache(
       UpdateCacheInsertionMetrics(block_type, get_context, charge,
                                   s.IsOkOverwritten(), rep_->ioptions.stats);
     } else {
+		printf("insert failed\n");
       RecordTick(statistics, BLOCK_CACHE_ADD_FAILURES);
     }
   } else {
@@ -1521,7 +1525,7 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
   if (block_cache != nullptr || block_cache_compressed != nullptr) {
     // create key for block cache
 	  if(block_type == BlockType::kIndex){
-		  key_data = rep_->base_cache_key.WithOffset((handle.offset() + handle.size() / 2) >> 2);
+		  key_data = rep_->base_cache_key.WithOffset((handle.offset() + (handle.size() / 2)) >> 2);
 	  }
 	  else{
 		  key_data = GetCacheKey(rep_->base_cache_key, handle);
@@ -1583,46 +1587,74 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
           rep_->blocks_maybe_compressed;
 
 	  const bool do_uncompress = maybe_compressed && !block_cache_compressed;
-      CompressionType raw_block_comp_type;
+      CompressionType raw_block_comp_type = kNoCompression;
       BlockContents raw_block_contents;
-	  BlockContents raw_block_contents_2;
-//	  BlockContents* contents_2 = nullptr;
-	  bool get_unify = false;
 
 	  if (!contents) {
         Histograms histogram = for_compaction ? READ_BLOCK_COMPACTION_MICROS
                                               : READ_BLOCK_GET_MICROS;
         StopWatch sw(rep_->ioptions.clock, statistics, histogram);
-        BlockFetcher block_fetcher(
-            rep_->file.get(), prefetch_buffer, rep_->footer, ro, handle,
-            &raw_block_contents, rep_->ioptions, do_uncompress,
-            maybe_compressed, block_type, uncompression_dict,
-            rep_->persistent_cache_options,
-            GetMemoryAllocator(rep_->table_options),
-            GetMemoryAllocatorForCompressedBlock(rep_->table_options),
-			false /* for compaction */,
-			&raw_block_contents_2);
-//		printf("I/O block type %d\n", (int)block_type);
-        s = block_fetcher.ReadBlockContents();
-        raw_block_comp_type = block_fetcher.get_compression_type();
-		get_unify = block_fetcher.Is_Get_Unify();
-        contents = &raw_block_contents;
-//		contents_2 = &raw_block_contents_2;
-        if (get_context) {
-          switch (block_type) {
-            case BlockType::kIndex:
-              ++get_context->get_context_stats_.num_index_read;
-              break;
-            case BlockType::kFilter:
-              ++get_context->get_context_stats_.num_filter_read;
-              break;
-            case BlockType::kData:
-              ++get_context->get_context_stats_.num_data_read;
-              break;
-            default:
-              break;
-          }
-        }
+
+//		bool tmp_flag = false;
+//		size_t before_size = 0;
+//		char before_content[4096];
+
+		// already in unify_contents
+		if(handle.offset() + handle.size() / 2 == unify_handle_offset
+				&& gettid() == t_id){
+//			printf("unify get %d\n", unify_get++);
+			assert(block_type == BlockType::kIndex);
+//			printf("%d %lu\n", (int)block_type, unify_size);
+			raw_block_contents = BlockContents(Slice(unify_contents, unify_size));
+			contents = &raw_block_contents;
+
+//			s = block_fetcher.ReadUnifyContents();
+			raw_block_comp_type = kNoCompression;
+//			contents = &raw_block_contents;
+
+			unify_handle_offset = -1;
+//			tmp_flag = true;
+//			before_size = unify_size;
+//			memcpy(&before_content[0], &unify_contents[0], sizeof(char)*4096);
+		}
+		else {
+			BlockFetcher block_fetcher(
+					rep_->file.get(), prefetch_buffer, rep_->footer, ro, handle,
+					&raw_block_contents, rep_->ioptions, do_uncompress,
+					maybe_compressed, block_type, uncompression_dict,
+					rep_->persistent_cache_options,
+					GetMemoryAllocator(rep_->table_options),
+					GetMemoryAllocatorForCompressedBlock(rep_->table_options));
+
+			s = block_fetcher.ReadBlockContents();
+//			if(block_type == BlockType::kFilter || block_type == BlockType::kIndex){
+//			}
+			raw_block_comp_type = block_fetcher.get_compression_type();
+			contents = &raw_block_contents;
+//			if(tmp_flag == true){
+//				for(size_t i=0;i<before_size; i++){
+//					if(before_content[i] != contents->data[i]){
+//						printf("sibal\n");
+//						break;
+//					}
+//				}
+//			}
+			if (get_context) {
+				switch (block_type) {
+					case BlockType::kIndex:
+						++get_context->get_context_stats_.num_index_read;
+						break;
+					case BlockType::kFilter:
+						++get_context->get_context_stats_.num_filter_read;
+						break;
+					case BlockType::kData:
+						++get_context->get_context_stats_.num_data_read;
+						break;
+					default:
+						break;
+				}
+			}
+		}
       }
 	  else {
         raw_block_comp_type = GetBlockCompressionType(*contents);
@@ -1631,14 +1663,18 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
       if (s.ok()) {
         // If filling cache is allowed and a cache is configured, try to put the
         // block to the cache.
-
 		s = PutDataBlockToCache(
-				key, block_cache, block_cache_compressed, block_entry, contents,
-				raw_block_comp_type, uncompression_dict,
+				key, block_cache, block_cache_compressed, block_entry, 
+				contents, raw_block_comp_type, uncompression_dict,
 				GetMemoryAllocator(rep_->table_options), block_type, get_context);
-//			printf("after put content %d %lu\n", (int)block_type,(((Block*)block_entry->GetValue())->size()));
+//		if(((Block*)block_entry->GetValue())->size() == 0){
+//			if(unify_exist){
+//				printf("unify exist\n");
+//				printf("sibal %d %lu\n", (int)block_type, contents->data.size());
+//			}
+//		}
 
-		if(get_unify == true){
+/*		if(get_unify == true){
 			CachableEntry<TBlocklike> tmp_block_entry;
 			CacheKey tmp_key_data;
 			Slice tmp_key;
@@ -1646,7 +1682,7 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
 
 //			CacheAllocationPtr tmp_buf = AllocateBlock(unify_size, GetMemoryAllocator(rep_->table_options));
 //			memcpy(tmp_buf.get(), unify_contents, unify_size);
-			raw_block_contents_2 = BlockContents(Slice(unify_contents, unify_size));
+			unify_contents_ = BlockContents(Slice(unify_contents, unify_size));
 
 			if(block_type == BlockType::kFilter){
 				tmp_block_type = BlockType::kIndex;
@@ -1659,11 +1695,10 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
 			tmp_key = tmp_key_data.AsSlice();
 
 			s = PutDataBlockToCache(
-					tmp_key, block_cache, block_cache_compressed, &tmp_block_entry, &raw_block_contents_2,
+					tmp_key, block_cache, block_cache_compressed, &tmp_block_entry, &unify_contents_,
 					raw_block_comp_type, uncompression_dict,
 					GetMemoryAllocator(rep_->table_options), tmp_block_type, get_context);
-//			printf("after put content_2 %d %lu\n", (int)tmp_block_type,(((Block*)tmp_block_entry.GetValue())->size()));
-		}
+		}*/
       }
     }
   }
@@ -2447,7 +2482,7 @@ Status BlockBasedTable::Get(const ReadOptions& read_options, const Slice& key,
   TEST_SYNC_POINT("BlockBasedTable::Get:BeforeFilterMatch");
   
   FILTER[gettid()%NUM_THREADS]=1;
-  
+
   const bool may_match = FullFilterKeyMayMatch(
       filter, key, no_io, prefix_extractor, get_context, &lookup_context);
   
