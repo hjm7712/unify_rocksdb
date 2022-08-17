@@ -10,7 +10,7 @@
 #operationcount=200000000
 recordcount=1600000000
 #operationcount=16000000
-operationcount=9600000
+operationcount=1600000
 #operationcount=64000000
 
 workload=com.yahoo.ycsb.workloads.CoreWorkload

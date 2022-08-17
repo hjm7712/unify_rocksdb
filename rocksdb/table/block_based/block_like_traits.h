@@ -164,6 +164,9 @@ class BlocklikeTraits<Block> {
       case BlockType::kFilter:
         return GetCacheItemHelperForRole<Block,
                                          CacheEntryRole::kFilterMetaBlock>();
+	  case BlockType::kUnify:
+		return GetCacheItemHelperForRole<Block,
+			   							 CacheEntryRole::kFilterMetaBlock>();
       default:
         // Not a recognized combination
         assert(false);

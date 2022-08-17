@@ -46,6 +46,9 @@ extern std::atomic<unsigned long long> total_get;
 extern std::atomic<int> FILTER_HIT_COUNT, FILTER_MISS_COUNT;
 extern std::atomic<int> INDEX_HIT_COUNT, INDEX_MISS_COUNT;
 extern std::atomic<int> DATA_HIT_COUNT, DATA_MISS_COUNT;
+extern std::atomic<int> unify_get;
+extern std::atomic<int> UNIFY_IO, FILTER_IO, INDEX_IO, DATA_IO;
+extern std::atomic<int> UNIFY_TOP_HIT_COUNT, UNIFY_TOP_MISS_COUNT;
 
 namespace ROCKSDB_NAMESPACE {
 
@@ -550,6 +553,20 @@ ColumnFamilyData::ColumnFamilyData(
       allow_2pc_(db_options.allow_2pc),
       last_memtable_id_(0),
       db_paths_registered_(false) {
+ 
+  max_client_threads = db_options.max_client_threads;		  
+  unify_contents = new char*[max_client_threads];
+  unify_size = new size_t[max_client_threads];
+  unify_handle_offset = new size_t[max_client_threads];
+  t_id = new int[max_client_threads];
+  for(int i=0; i<max_client_threads; i++){
+	  unify_size[i] = -1;
+	  unify_handle_offset[i] = -1;
+	  t_id[i] = -1;
+	  unify_contents[i] = new char[4096];
+	  memset(unify_contents[i], 0, sizeof(char)*4096);
+  }
+
   if (id_ != kDummyColumnFamilyDataId) {
     // TODO(cc): RegisterDbPaths can be expensive, considering moving it
     // outside of this constructor which might be called with db mutex held.
@@ -624,6 +641,16 @@ ColumnFamilyData::ColumnFamilyData(
 // DB mutex held
 ColumnFamilyData::~ColumnFamilyData() {
   assert(refs_.load(std::memory_order_relaxed) == 0);
+
+  // BIG SSD
+  for(int i=0; i<max_client_threads; i++){
+	  delete[] unify_contents[i];
+  }
+  delete[] t_id;
+  delete[] unify_size;
+  delete[] unify_handle_offset;
+  delete[] unify_contents;
+
   // remove from linked list
   auto prev = prev_;
   auto next = next_;
@@ -636,17 +663,26 @@ ColumnFamilyData::~ColumnFamilyData() {
   int f_hit = FILTER_HIT_COUNT.load();
   int i_hit = INDEX_HIT_COUNT.load();
   int d_hit = DATA_HIT_COUNT.load();
+  int u_hit = UNIFY_TOP_HIT_COUNT.load();
 
   int f_miss = FILTER_MISS_COUNT.load();
   int i_miss = INDEX_MISS_COUNT.load();
   int d_miss = DATA_MISS_COUNT.load();
+  int u_miss = UNIFY_TOP_MISS_COUNT.load();
 
   int hit = f_hit+i_hit+d_hit;
   int miss = f_miss+i_miss+d_miss;
-  printf("HIT %d MISS %d HIT_RATIO %f\n",hit, miss, (double)hit/(hit+miss));
+  printf("HIT %d MISS %d HIT_RATIO %f\n",hit + unify_get.load(), miss, (double)(hit+unify_get.load())/(hit+miss));
   printf("FILTER: HIT %d MISS %d \n",f_hit, f_miss);
   printf("INDEX: HIT %d MISS %d \n",i_hit, i_miss);
   printf("DATA: HIT %d MISS %d \n",d_hit, d_miss);
+  printf("UNIFY_TOP: HIT %d MISS %d \n",u_hit, u_miss);
+  printf("UNIFY GET %d\n", unify_get.load());
+  printf("UNIFY_TOP IO %d\n", UNIFY_IO.load());
+  printf("FILTER IO %d\n", FILTER_IO.load());
+  printf("INDEX IO %d\n", INDEX_IO.load());
+  printf("DATA IO %d\n\n", DATA_IO.load());
+
 
   if (!dropped_ && column_family_set_ != nullptr) {
     // If it's dropped, it's already removed from column family set

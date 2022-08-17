@@ -206,24 +206,12 @@ inline std::string CoreWorkload::BuildKeyName(uint64_t key_num) {
   if (!ordered_inserts_) {
     key_num = utils::Hash(key_num);
   }
-/*
-  std::string kk = std::string("user").append(std::to_string(key_num));
-
-  std::string tmp = std::to_string(key_num);
-  int rest = 44-kk.lenght();
-  while(rest--){
-	  kk=kk.append("0");
-  }
-  return kk;
-*/
-
   std::string kk = std::to_string(key_num);
   int rest = 44-kk.length();
   while(rest--){
-	  kk = std::string("0").append(kk);
+      kk = std::string("0").append(kk);
   }
   return std::string("user").append(kk);
-
 //  return std::string("user").append(std::to_string(key_num));
 }
 

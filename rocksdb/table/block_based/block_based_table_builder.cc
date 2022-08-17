@@ -58,7 +58,7 @@
 // BIG SSD
 #include "util/crc32c.h"
 extern int NUM_THREADS;
-extern size_t unify_handle_offset;
+extern size_t* unify_handle_offset;
 
 namespace ROCKSDB_NAMESPACE {
 
@@ -1484,8 +1484,12 @@ void BlockBasedTableBuilder::WriteRawBlock_Unify(const Slice& index_contents,
   size_t unify_size = index_contents.size() + filter_contents.size() + sizeof(uint64_t);
   handle->set_offset(r->get_offset());
   handle->set_size(unify_size);
-  if(handle->offset() == unify_handle_offset){
-	  unify_handle_offset = -1;
+  
+  if(NUM_THREADS != -1){
+	  int index = gettid() % NUM_THREADS;
+	  if(handle->offset() + handle->size() / 2 == unify_handle_offset[index]){
+		  unify_handle_offset[index] = -1;
+	  }
   }
 //  handle->set_index_offset(r->get_offset() + filter_contents.size());
   

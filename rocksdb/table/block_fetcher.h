@@ -71,7 +71,7 @@ class BlockFetcher {
   }
 
   IOStatus ReadBlockContents();
-  IOStatus ReadUnifyContents();
+//  IOStatus ReadUnifyContents();
   inline CompressionType get_compression_type() const {
     return compression_type_;
   }

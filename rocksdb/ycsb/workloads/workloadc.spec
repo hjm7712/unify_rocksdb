@@ -8,18 +8,11 @@
 
 #recordcount=200000000
 #operationcount=200000000
-#recordcount=1600000000
-#operationcount=16000000
-#operationcount=400000
-#operationcount=64000000
-
-#recordcount=1100000000
-#operationcount=1100000000
-
-recordcount=16000000
+recordcount=1600000000
 operationcount=16000000
-
 workload=com.yahoo.ycsb.workloads.CoreWorkload
+
+readallfields=true
 
 readproportion=1
 updateproportion=0

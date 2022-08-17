@@ -26,10 +26,11 @@
 #include "util/compression.h"
 #include "util/stop_watch.h"
 
-extern char unify_contents[4096];
-extern size_t unify_size;
-extern size_t unify_handle_offset;
-extern int t_id;
+extern int NUM_THREADS;
+extern char** unify_contents;
+extern size_t* unify_size;
+extern size_t* unify_handle_offset;
+extern int* t_id;
 
 namespace ROCKSDB_NAMESPACE {
 
@@ -221,6 +222,9 @@ inline void BlockFetcher::GetBlockContents() {
 		heap_buf_ = AllocateBlock(filter_size, memory_allocator_);
 		memcpy(heap_buf_.get(), used_buf_, filter_size);
 		*contents_ = BlockContents(std::move(heap_buf_), filter_size);
+#ifndef NDEBUG
+		num_heap_buf_memcpy_++;
+#endif
 	}
 	else if(block_type_ == BlockType::kFilter){
 		size_t filter_size = DecodeFixed64(&used_buf_[block_size_-sizeof(uint64_t)]);
@@ -233,12 +237,15 @@ inline void BlockFetcher::GetBlockContents() {
 		heap_buf_ = AllocateBlock(filter_size, memory_allocator_);
 		memcpy(heap_buf_.get(), used_buf_, filter_size);
 		*contents_ = BlockContents(std::move(heap_buf_), filter_size);
-
+#ifndef NDEBUG
+		num_heap_buf_memcpy_++;
+#endif
 		// partition index
-		if(gettid() == t_id){
-			unify_handle_offset = handle_.offset() + handle_.size() / 2;
-			memcpy(unify_contents, &used_buf_[filter_size], index_size);
-			unify_size = index_size;
+		if(NUM_THREADS > 0 && t_id[gettid() % NUM_THREADS] == gettid()){
+			int index = gettid() % NUM_THREADS;
+			unify_handle_offset[index] = handle_.offset() + handle_.size() / 2;
+			memcpy(&unify_contents[index][0], &used_buf_[filter_size], index_size);
+			unify_size[index] = index_size;
 		}
 
 //		heap_buf_2_ = AllocateBlock(index_size, memory_allocator_);
@@ -256,7 +263,9 @@ inline void BlockFetcher::GetBlockContents() {
 		heap_buf_ = AllocateBlock(index_size, memory_allocator_);
 		memcpy(heap_buf_.get(), &used_buf_[filter_size], index_size);
 		*contents_ = BlockContents(std::move(heap_buf_), index_size);
-
+#ifndef NDEBUG
+		num_heap_buf_memcpy_++;
+#endif
 		// partition filter
 //		unify_handle_offset = handle_.offset();
 //		memcpy(&unify_contents[0], used_buf_, filter_size);
@@ -402,12 +411,12 @@ IOStatus BlockFetcher::ReadBlockContents() {
   return io_status_;
 }
 
-IOStatus BlockFetcher::ReadUnifyContents() {
+/*IOStatus BlockFetcher::ReadUnifyContents() {
 	heap_buf_ = AllocateBlock(unify_size, memory_allocator_);
 	memcpy(heap_buf_.get(), &unify_contents[0], unify_size);
 	*contents_ = BlockContents(std::move(heap_buf_), unify_size);
 
 	return IOStatus::OK();
-}
+}*/
 
 }  // namespace ROCKSDB_NAMESPACE

@@ -14,9 +14,6 @@
 #include "rocksdb/cache.h"
 #include "rocksdb/cleanable.h"
 
-// BIG SSD
-#include "table/format.h"
-
 namespace ROCKSDB_NAMESPACE {
 
 // CachableEntry is a handle to an object that may or may not be in the block

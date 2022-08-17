@@ -35,7 +35,7 @@ int main(const int argc, const char *argv[]){
 
 	rocksdb::BlockBasedTableOptions block_based_options;
 	const FilterPolicy* bloomfilter = NewBloomFilterPolicy(10, false);	// 10 bits is default
-	size_t cache_size = 3 * 1024 * 1024 * 1024;
+	size_t cache_size = 12 * 1024 * 1024;
 	
 	LRUCacheOptions lru_options(cache_size, /*sharding bits*/ 6, /*strict capacity*/true, 0.0);
 	std::shared_ptr<Cache> lrucache = NewLRUCache(lru_options);
@@ -46,8 +46,7 @@ int main(const int argc, const char *argv[]){
 	block_based_options.cache_index_and_filter_blocks = true;
 	block_based_options.block_cache = lrucache;
 	block_based_options.cache_index_and_filter_blocks_with_high_priority = false;
-	block_based_options.pin_top_level_index_and_filter=false;
-	block_based_options.pin_l0_filter_and_index_blocks_in_cache=false;
+	block_based_options.pin_top_level_index_and_filter = false;
 
 	TableFactory* table_factory = NewBlockBasedTableFactory(block_based_options);
 	options.table_factory.reset(table_factory);
@@ -56,23 +55,16 @@ int main(const int argc, const char *argv[]){
 	options.recycle_log_file_num = false;
 	options.allow_2pc = false;
 	options.compression = rocksdb::kNoCompression;
-	options.max_background_flushes=4;
-	options.max_background_compactions=6;
-	options.max_write_buffer_number=8;
-	options.level0_file_num_compaction_trigger=4;
-	options.level0_slowdown_writes_trigger=20;
-	options.level0_stop_writes_trigger=36;
-//	options.max_open_files = 1000000;
-//	options.max_client_threads = client_num;	// client_num
+	options.max_open_files = 1000000;
+	options.max_client_threads = client_num;	// client_num
 	options.wal_dir = log_dir;
 
 	options.use_direct_reads = true;
 	options.use_direct_io_for_flush_and_compaction = true;
-	options.writable_file_max_buffer_size = 64 * 1024 * 1024;
 
-	write_options.sync = false;
-	write_options.disableWAL = true;
-//	write_options.writable_file_max_buffer_size = 64 * 1024 * 1024;
+
+	write_options.sync = true;
+	write_options.disableWAL = false;
 	if(is_load == 1){
 		write_options.sync = false;
 		write_options.disableWAL = true;
@@ -83,9 +75,8 @@ int main(const int argc, const char *argv[]){
 		options.create_if_missing = false;
 	}
 	options.statistics = rocksdb::CreateDBStatistics();
-//	options.max_total_wal_size =  1 * (1ull << 30); // wal size
-//	options.write_buffer_size = 1 * (1ull << 30);   // write buffer size
-	options.write_buffer_size = 64 * 1024 * 1024;   // write buffer size
+	options.max_total_wal_size =  1 * (1ull << 30); // wal size
+	options.write_buffer_size = 1 * (1ull << 30);   // write buffer size
 	auto env = rocksdb::Env::Default();
 	options.env = env;
 //	options.auto_config = true;
@@ -94,12 +85,11 @@ int main(const int argc, const char *argv[]){
 //		env->SetBgThreadCores(2, rocksdb::Env::HIGH);
 //		env->SetBgThreadCores(6, rocksdb::Env::LOW);
 //	}
-
 	env->SetBackgroundThreads(2, rocksdb::Env::HIGH);
 	env->SetBackgroundThreads(6, rocksdb::Env::LOW);
-//	options.max_background_jobs = 8;
-//	options.max_subcompactions = 6;
-//	options.max_write_buffer_number = 8;
+	options.max_background_jobs = 8;
+	options.max_subcompactions = 4;
+	options.max_write_buffer_number = 4;
 //	options.topfs_cache_size = 90; //20GB
 
 //	if(is_load == 0 /*|| is_load == 1*/){
@@ -162,7 +152,7 @@ int main(const int argc, const char *argv[]){
 		fflush(stdout);
 		if(is_load == 1){
 			rocksdb_client.Load();
-			std::this_thread::sleep_for(std::chrono::seconds(10));
+			std::this_thread::sleep_for(std::chrono::seconds(180));
 		}else{
 			rocksdb_client.Warmup();
 			rocksdb_client.Work();

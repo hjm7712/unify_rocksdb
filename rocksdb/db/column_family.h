@@ -523,6 +523,27 @@ class ColumnFamilyData {
 
   static const uint32_t kDummyColumnFamilyDataId;
 
+  // BIG SSD
+  int maxClientThreads(){
+	  return max_client_threads;
+  }
+
+  char** get_unify_contents(){
+	  return unify_contents;
+  }
+
+  size_t* get_unify_size(){
+	  return unify_size;
+  }
+
+  size_t* get_unify_handle_offset(){
+	  return unify_handle_offset;
+  }
+
+  int* get_t_id(){
+	  return t_id;
+  }
+
  private:
   friend class ColumnFamilySet;
   ColumnFamilyData(uint32_t id, const std::string& name,
@@ -616,6 +637,13 @@ class ColumnFamilyData {
   std::vector<std::shared_ptr<FSDirectory>> data_dirs_;
 
   bool db_paths_registered_;
+
+  // BIG SSD
+  int max_client_threads;
+  char** unify_contents;
+  size_t* unify_size;
+  size_t* unify_handle_offset;
+  int* t_id;
 
   std::string full_history_ts_low_;
 };

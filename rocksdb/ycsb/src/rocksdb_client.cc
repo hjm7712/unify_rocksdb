@@ -31,7 +31,7 @@ void RocksDBClient::Load(){
 	PrintArgs();
 	printf("Load %ld requests in %.3lf seconds.\n", load_num_, time/1000/1000);
 	printf("==================================================================\n");
-	std::this_thread::sleep_for(std::chrono::seconds(10));
+	std::this_thread::sleep_for(std::chrono::seconds(180));
 	std::string stat_str2;
  	db_->GetProperty("rocksdb.stats", &stat_str2);
  	printf("\n%s\n", stat_str2.c_str());
@@ -69,7 +69,6 @@ void RocksDBClient::Work(){
 		   			    std::placeholders::_3, std::placeholders::_4);
 //	}
 	
-	system("timeout 101s iostat -m 1 > output/bandwidth/result.txt &");
 	printf("start time: %s\n", GetDayTime().c_str());
 	auto start = TIME_NOW;
 	for(int i=0; i<worker_threads_; i++){

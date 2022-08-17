@@ -77,13 +77,20 @@
 std::atomic<int> FILTER_HIT_COUNT, FILTER_MISS_COUNT;
 std::atomic<int> INDEX_HIT_COUNT, INDEX_MISS_COUNT;
 std::atomic<int> DATA_HIT_COUNT, DATA_MISS_COUNT;
-extern unsigned long long FILTER[64], INDEX[64], DATA[64];
+std::atomic<int> UNIFY_TOP_HIT_COUNT, UNIFY_TOP_MISS_COUNT;
 extern int NUM_THREADS;
-char unify_contents[4096];
-size_t unify_size = -1;
-size_t unify_handle_offset = -1;
-int unify_get;
-extern int t_id;
+extern int* t_id;
+extern char** unify_contents;
+extern size_t* unify_size;
+extern size_t* unify_handle_offset;
+
+std::atomic<int> FILTER_IO;
+std::atomic<int> INDEX_IO;
+std::atomic<int> DATA_IO;
+std::atomic<int> UNIFY_IO;
+std::atomic<int> unify_get;
+
+extern std::atomic<unsigned long long> total_get;
 
 namespace ROCKSDB_NAMESPACE {
 
@@ -1414,7 +1421,6 @@ Status BlockBasedTable::PutDataBlockToCache(
       UpdateCacheInsertionMetrics(block_type, get_context, charge,
                                   s.IsOkOverwritten(), rep_->ioptions.stats);
     } else {
-		printf("insert failed\n");
       RecordTick(statistics, BLOCK_CACHE_ADD_FAILURES);
     }
   } else {
@@ -1549,12 +1555,14 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
         // TODO(haoyu): Differentiate cache hit on uncompressed block cache and
         // compressed block cache.
         is_cache_hit = true;
-
-		if(FILTER[gettid()%NUM_THREADS]==1)
+		
+		if(block_type == BlockType::kUnify)
+			UNIFY_TOP_HIT_COUNT.fetch_add(1);
+		if(block_type == BlockType::kFilter)
 			FILTER_HIT_COUNT.fetch_add(1);
-		if(INDEX[gettid()%NUM_THREADS]==1)
+		if(block_type == BlockType::kIndex)
 			INDEX_HIT_COUNT.fetch_add(1);
-		if(DATA[gettid()%NUM_THREADS]==1)
+		if(block_type == BlockType::kData)
 			DATA_HIT_COUNT.fetch_add(1);
 
         if (prefetch_buffer) {
@@ -1572,12 +1580,14 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
     // file.
     if (block_entry->GetValue() == nullptr &&
         block_entry->GetCacheHandle() == nullptr && !no_io && ro.fill_cache) {
-		
-		if(FILTER[gettid()%NUM_THREADS]==1)
+	
+		if(block_type == BlockType::kUnify)
+			UNIFY_TOP_MISS_COUNT.fetch_add(1);
+		if(block_type == BlockType::kFilter)
 			FILTER_MISS_COUNT.fetch_add(1);
-		if(INDEX[gettid()%NUM_THREADS]==1)
+		if(block_type == BlockType::kIndex)
 			INDEX_MISS_COUNT.fetch_add(1);
-		if(DATA[gettid()%NUM_THREADS]==1)
+		if(block_type == BlockType::kData)
 			DATA_MISS_COUNT.fetch_add(1);
 		
       Statistics* statistics = rep_->ioptions.stats;
@@ -1600,24 +1610,38 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
 //		char before_content[4096];
 
 		// already in unify_contents
-		if(handle.offset() + handle.size() / 2 == unify_handle_offset
-				&& gettid() == t_id){
-//			printf("unify get %d\n", unify_get++);
+		int index = gettid() % NUM_THREADS;
+		if(NUM_THREADS > 0 && t_id[index] == gettid()
+				&& handle.offset() + handle.size() / 2 == unify_handle_offset[index]){
+			unify_get.fetch_add(1);
 			assert(block_type == BlockType::kIndex);
-//			printf("%d %lu\n", (int)block_type, unify_size);
-			raw_block_contents = BlockContents(Slice(unify_contents, unify_size));
+//			printf("%d %d %d %lu\n", index, gettid(), NUM_THREADS, unify_size[index]);
+			raw_block_contents = BlockContents(Slice(&unify_contents[index][0], unify_size[index]));
 			contents = &raw_block_contents;
 
-//			s = block_fetcher.ReadUnifyContents();
+			//	s = block_fetcher.ReadUnifyContents();
 			raw_block_comp_type = kNoCompression;
-//			contents = &raw_block_contents;
+			//	contents = &raw_block_contents;
 
-			unify_handle_offset = -1;
-//			tmp_flag = true;
-//			before_size = unify_size;
-//			memcpy(&before_content[0], &unify_contents[0], sizeof(char)*4096);
+			unify_handle_offset[index] = -1;
+			//	tmp_flag = true;
+			//	before_size = unify_size;
+			//	memcpy(&before_content[0], &unify_contents[0], sizeof(char)*4096);
 		}
 		else {
+			if(block_type == BlockType::kFilter){
+				FILTER_IO.fetch_add(1);
+			}
+			if(block_type == BlockType::kUnify){
+				UNIFY_IO.fetch_add(1);
+			}
+			if(block_type == BlockType::kIndex){
+				INDEX_IO.fetch_add(1);
+			}
+			if(block_type == BlockType::kData){
+				DATA_IO.fetch_add(1);
+			}
+
 			BlockFetcher block_fetcher(
 					rep_->file.get(), prefetch_buffer, rep_->footer, ro, handle,
 					&raw_block_contents, rep_->ioptions, do_uncompress,
@@ -1702,7 +1726,33 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
       }
     }
   }
+/*
+  if(gettid()%NUM_THREADS == 0 && total_get.load()%500 == 0){
+	  
+	  int u_hit = UNIFY_TOP_HIT_COUNT.load();
+	  int f_hit = FILTER_HIT_COUNT.load();
+	  int i_hit = INDEX_HIT_COUNT.load();
+	  int d_hit = DATA_HIT_COUNT.load();
 
+	  int u_miss = UNIFY_TOP_MISS_COUNT.load();
+	  int f_miss = FILTER_MISS_COUNT.load();
+	  int i_miss = INDEX_MISS_COUNT.load();
+	  int d_miss = DATA_MISS_COUNT.load();
+
+	  int hit = f_hit+i_hit+d_hit;
+	  int miss = f_miss+i_miss+d_miss;
+	  printf("HIT %d MISS %d HIT_RATIO %f\n",hit, miss, (double)hit/(hit+miss));
+	  printf("FILTER: HIT %d MISS %d \n",f_hit, f_miss);
+	  printf("INDEX: HIT %d MISS %d \n",i_hit, i_miss);
+	  printf("DATA: HIT %d MISS %d \n",d_hit, d_miss);
+	  printf("UNIFY_TOP: HIT %d MISS %d \n",u_hit, u_miss);
+	  printf("UNIFY GET %d\n", unify_get.load());
+	  printf("UNIFY_TOP IO %d\n", UNIFY_IO.load());
+	  printf("FILTER IO %d\n", FILTER_IO.load());
+	  printf("INDEX IO %d\n", INDEX_IO.load());
+	  printf("DATA IO %d\n\n", DATA_IO.load());
+  }
+*/
   // Fill lookup_context.
   if (block_cache_tracer_ && block_cache_tracer_->is_tracing_enabled() &&
       lookup_context) {
@@ -2481,12 +2531,10 @@ Status BlockBasedTable::Get(const ReadOptions& read_options, const Slice& key,
   }
   TEST_SYNC_POINT("BlockBasedTable::Get:BeforeFilterMatch");
   
-  FILTER[gettid()%NUM_THREADS]=1;
 
   const bool may_match = FullFilterKeyMayMatch(
       filter, key, no_io, prefix_extractor, get_context, &lookup_context);
   
-  FILTER[gettid()%NUM_THREADS]=0;
   
   TEST_SYNC_POINT("BlockBasedTable::Get:AfterFilterMatch");
   if (!may_match) {
@@ -2501,11 +2549,9 @@ Status BlockBasedTable::Get(const ReadOptions& read_options, const Slice& key,
       need_upper_bound_check = PrefixExtractorChanged(prefix_extractor);
     }
 
-	INDEX[gettid()%NUM_THREADS]=1;
     auto iiter =
         NewIndexIterator(read_options, need_upper_bound_check, &iiter_on_stack,
                          get_context, &lookup_context);
-	INDEX[gettid()%NUM_THREADS]=0;
     std::unique_ptr<InternalIteratorBase<IndexValue>> iiter_unique_ptr;
     if (iiter != &iiter_on_stack) {
       iiter_unique_ptr.reset(iiter);
@@ -2516,7 +2562,6 @@ Status BlockBasedTable::Get(const ReadOptions& read_options, const Slice& key,
     bool matched = false;  // if such user key matched a key in SST
     bool done = false;
 
-	DATA[gettid()%NUM_THREADS]=1;
     for (iiter->Seek(key); iiter->Valid() && !done; iiter->Next()) {
       IndexValue v = iiter->value();
 
@@ -2639,7 +2684,6 @@ Status BlockBasedTable::Get(const ReadOptions& read_options, const Slice& key,
         break;
       }
     }
-	DATA[gettid()%NUM_THREADS]=0;
     if (matched && filter != nullptr && !filter->IsBlockBased()) {
       RecordTick(rep_->ioptions.stats, BLOOM_FILTER_FULL_TRUE_POSITIVE);
       PERF_COUNTER_BY_LEVEL_ADD(bloom_filter_full_true_positive, 1,

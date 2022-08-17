@@ -668,6 +668,7 @@ ImmutableDBOptions::ImmutableDBOptions(const DBOptions& options)
       info_log(options.info_log),
       info_log_level(options.info_log_level),
       max_file_opening_threads(options.max_file_opening_threads),
+	  max_client_threads(options.max_client_threads),
       statistics(options.statistics),
       use_fsync(options.use_fsync),
       db_paths(options.db_paths),

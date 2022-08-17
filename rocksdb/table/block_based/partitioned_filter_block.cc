@@ -420,6 +420,7 @@ bool PartitionedFilterBlockReader::MayMatch(
   CachableEntry<Block> filter_block;
   Status s =
       GetOrReadFilterBlock(no_io, get_context, lookup_context, &filter_block);
+
   if (UNLIKELY(!s.ok())) {
     IGNORE_STATUS_IF_ERROR(s);
     return true;

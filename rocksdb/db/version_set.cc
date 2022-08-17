@@ -70,11 +70,14 @@
 #include <atomic>
 #define gettid() syscall(SYS_gettid)
 
-int NUM_THREADS=1;
+int NUM_THREADS = -1;
+int* t_id;
+char** unify_contents;
+size_t* unify_size;
+size_t* unify_handle_offset;
+
 unsigned long long start, end, lo, hi, total_latency, found_get[64];
-unsigned long long FILTER[64], INDEX[64], DATA[64];
 std::atomic<unsigned long long> total_get;
-int t_id = -1;
 
 namespace ROCKSDB_NAMESPACE {
 
@@ -1980,10 +1983,19 @@ void Version::Get(const ReadOptions& read_options, const LookupKey& k,
                   PinnedIteratorsManager* pinned_iters_mgr, bool* value_found,
                   bool* key_exists, SequenceNumber* seq, ReadCallback* callback,
                   bool* is_blob, bool do_merge) {
-	t_id = gettid();
+
+	NUM_THREADS = cfd_->maxClientThreads();
+	unify_contents = cfd_->get_unify_contents();
+	unify_size = cfd_->get_unify_size();
+	unify_handle_offset = cfd_->get_unify_handle_offset();
+
+	t_id = cfd_->get_t_id();
+
+	t_id[gettid() % NUM_THREADS] = gettid();
+
 //	sleep(0.1);
 //	printf("GET\n");
-//  total_get.fetch_add(1);
+  total_get.fetch_add(1);
 
 //  if(gettid()%NUM_THREADS==0){
 //	  asm volatile("rdtsc" : "=a" (lo), "=d" (hi));
