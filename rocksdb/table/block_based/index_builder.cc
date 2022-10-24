@@ -333,7 +333,7 @@ Status PartitionedIndexBuilder::Finish(
 
 // BIG SSD
 Status PartitionedIndexBuilder::Finish_Unify(
-    IndexBlocks* index_blocks, const BlockHandle& /*last_partition_block_handle*/, Slice* index_data) {
+    IndexBlocks* index_blocks, const BlockHandle& /*last_partition_block_handle*/, Slice* index_data, size_t top_level_index_size) {
   if (partition_cnt_ == 0) {
     partition_cnt_ = entries_.size();
   }
@@ -346,6 +346,7 @@ Status PartitionedIndexBuilder::Finish_Unify(
   if(entries_.empty()){
 	  index_blocks->index_block_contents = Slice();
 	  *index_data = index_blocks->index_block_contents;
+	  top_level_index_size_ = top_level_index_size;
 	  return Status::Incomplete();
   }
 

@@ -214,6 +214,7 @@ struct BlockBasedTableOptions {
   };
 
   IndexType index_type = kBinarySearch;
+//  IndexType index_type = kTwoLevelIndexSearch;
 
   // The index type that will be used for the data block.
   enum DataBlockIndexType : char {

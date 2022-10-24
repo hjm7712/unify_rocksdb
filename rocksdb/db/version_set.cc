@@ -2150,6 +2150,18 @@ void Version::Get(const ReadOptions& read_options, const LookupKey& k,
     }
     f = fp.GetNextFile();
   }
+  printf("NOT FOUND\n");
+  for(size_t i = 0; i<ikey.size(); i++){
+	  printf("%c",ikey.data()[i]);
+  }
+  printf("\n");
+
+  for(size_t i = 0; i<user_key.size(); i++){
+	  printf("%c",user_key.data()[i]);
+  }
+  printf("\n");
+
+
   if (db_statistics_ != nullptr) {
     get_context.ReportCounters();
   }

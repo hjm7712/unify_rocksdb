@@ -386,6 +386,7 @@ IOStatus BlockFetcher::ReadBlockContents() {
     if (io_status_.ok()) {
       InsertCompressedBlockToPersistentCacheIfNeeded();
     } else {
+		printf("Checksum corruption: block type %d bs with trailer %ld bs %ld\n", (int)block_type_, block_size_with_trailer_, block_size_);
       return io_status_;
     }
   }

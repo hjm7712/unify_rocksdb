@@ -1,0 +1,2042 @@
+Linux 5.4.0-117-generic (ubuntu) 	07/04/2022 	_x86_64_	(48 CPU)
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.67    0.00    1.56    1.04    0.00   93.74
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              7.83         0.25         0.61         0.25     515886    1257786     516757
+dm-1              0.14         0.00         0.00         0.00         47       1057          0
+loop0             0.00         0.00         0.00         0.00          5          0          0
+loop1             0.00         0.00         0.00         0.00          1          0          0
+loop2             0.36         0.00         0.00         0.00        736          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1        6912.69       110.23        66.70         0.00  228325480  138154985          0
+sda               5.38         0.25         0.61         0.25     515939    1258569     516757
+sdb               0.00         0.00         0.00         0.00          7          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.78    0.00    1.28    6.94    0.00   88.00
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0             30.00         0.12         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       202719.00       549.03         0.00         0.00        549          0          0
+sda               5.00         0.12         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           4.04    0.00    1.58    5.65    0.00   88.73
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       193055.00       522.70         0.00         0.00        522          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.58    0.00    1.81    4.47    0.00   90.14
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       193203.00       522.73         0.00         0.00        522          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.98    0.00    1.85    4.87    0.00   89.30
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0             20.00         0.00         0.08         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       187050.00       506.64         0.00         0.00        506          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.99    0.00    1.89    4.94    0.00   89.17
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       189412.00       513.09         0.00         0.00        513          0          0
+sda               3.00         0.00         0.08         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.78    0.00    1.61    6.27    0.00   88.34
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       191097.00       517.33         0.06         0.00        517          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           4.24    0.00    1.91    7.49    0.00   86.36
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       189763.00       513.88         0.00         0.00        513          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.72    0.00    1.70    7.79    0.00   86.78
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       194748.00       527.12         0.00         0.00        527          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.70    0.00    1.75    7.78    0.00   86.77
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       195519.00       529.42         0.00         0.00        529          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.90    0.00    1.47    7.88    0.00   86.75
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              4.00         0.02         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       196909.00       533.44         0.00         0.00        533          0          0
+sda               5.00         0.02         0.01         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.83    0.00    1.47    8.92    0.00   85.77
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       195143.56       528.51         0.00         0.00        533          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.90    0.00    1.97    8.89    0.00   85.23
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       192611.00       521.42         0.00         0.00        521          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           4.00    0.00    1.66    8.91    0.00   85.42
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       190027.00       514.36         0.00         0.00        514          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.95    0.00    1.62    7.97    0.00   86.46
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       197579.00       534.78         0.00         0.00        534          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           4.02    0.00    1.51    6.71    0.00   87.76
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       194123.00       525.46         0.00         0.00        525          0          0
+sda               3.00         0.00         0.01         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           4.16    0.00    2.00    8.66    0.00   85.19
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       186182.00       504.20         0.00         0.00        504          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           4.24    0.00    1.74    9.43    0.00   84.59
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       190865.00       516.50         0.00         0.00        516          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.72    0.00    1.75   10.47    0.00   84.06
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       197360.00       534.59         0.00         0.00        534          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.82    0.00    1.68    7.52    0.00   86.97
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       197034.00       533.45         0.00         0.00        533          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           4.20    0.00    1.76    6.57    0.00   87.46
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              3.00         0.00         0.04         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       194439.00       526.44         0.00         0.00        526          0          0
+sda               4.00         0.00         0.05         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.50    0.00    1.73    6.31    0.00   88.46
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       194511.00       526.40         0.00         0.00        526          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.95    0.00    1.58    6.64    0.00   87.84
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       196934.00       533.04         0.00         0.00        533          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           4.07    0.00    1.49    7.71    0.00   86.73
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       197082.00       533.68         0.00         0.00        533          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.71    0.00    1.52    8.00    0.00   86.77
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              5.00         0.00         0.02         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       197641.00       535.33         0.00         0.00        535          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.91    0.00    1.51    7.93    0.00   86.64
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0             81.00         0.00         0.46         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       196232.00       531.40         0.00         0.00        531          0          0
+sda              37.00         0.00         0.48         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           4.09    0.00    1.56    8.86    0.00   85.49
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       192951.00       522.43         0.00         0.00        522          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           4.06    0.00    1.59    9.32    0.00   85.03
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       200424.00       542.75         0.00         0.00        542          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.46    0.00    1.56    9.36    0.00   85.62
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       199741.00       540.70         0.00         0.00        540          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.78    0.00    1.79    9.12    0.00   85.32
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0             20.00         0.00         0.08         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       195778.00       530.12         0.00         0.00        530          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.56    0.00    1.58    9.26    0.00   85.60
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0             28.00         0.00        12.38         0.00          0         12          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       197196.00       534.05         0.63         0.00        534          0          0
+sda              31.00         0.00        12.45         0.00          0         12          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.58    0.00    1.56    9.29    0.00   85.56
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       197858.00       535.96         0.00         0.00        535          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.60    0.00    1.35    9.51    0.00   85.54
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       202229.00       547.60         0.00         0.00        547          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           4.92    0.00    1.28    9.07    0.00   84.73
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       194637.00       526.88         0.00         0.00        526          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.83    0.00    1.24   10.79    0.00   84.14
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0             12.00         0.00         0.05         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       201322.00       545.12         0.00         0.00        545          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.79    0.00    1.07   10.87    0.00   84.26
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       202378.00       547.99         0.00         0.00        547          0          0
+sda               3.00         0.00         0.05         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.59    0.00    1.14   10.80    0.00   84.47
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0             43.00         0.00         0.20         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       202596.00       548.56         0.01         0.00        548          0          0
+sda              30.00         0.00         0.20         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.80    0.00    1.43    9.47    0.00   85.30
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              1.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       202107.00       547.04         0.00         0.00        547          0          0
+sda               1.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.85    0.00    1.45    8.85    0.00   85.85
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       198107.00       536.35         0.00         0.00        536          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           4.38    0.00    1.33    8.59    0.00   85.70
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              4.00         0.00         0.02         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       193425.00       523.64         0.00         0.00        523          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.61    0.00    1.43    7.97    0.00   86.98
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       197661.00       534.87         0.00         0.00        534          0          0
+sda               3.00         0.00         0.02         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.43    0.00    1.68    8.08    0.00   86.81
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       200161.00       542.34         0.00         0.00        542          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.86    0.00    1.51    8.02    0.00   86.61
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       199795.00       540.70         0.00         0.00        540          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.74    0.00    1.64    7.96    0.00   86.66
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       198390.00       536.88         0.00         0.00        536          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.70    0.00    1.64    7.99    0.00   86.68
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       198383.00       537.16         0.00         0.00        537          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.90    0.00    1.45    7.79    0.00   86.86
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       198953.00       538.62         0.00         0.00        538          0          0
+sda               3.00         0.00         0.01         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.69    0.00    1.48    8.62    0.00   86.22
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       197027.00       533.47         0.00         0.00        533          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.63    0.00    1.60    7.83    0.00   86.94
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       194697.00       527.32         0.00         0.00        527          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           4.06    0.00    1.26    8.86    0.00   85.81
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       196186.00       531.36         0.00         0.00        531          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.68    0.00    1.33    9.47    0.00   85.52
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       201401.00       544.98         0.00         0.00        544          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.58    0.00    1.41    9.49    0.00   85.52
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       201722.00       546.74         0.00         0.00        546          0          0
+sda               3.00         0.00         0.01         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           4.04    0.00    1.26    9.33    0.00   85.37
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       198597.00       537.79         0.00         0.00        537          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           4.46    0.00    1.56    7.86    0.00   86.12
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       191240.00       517.88         0.00         0.00        517          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           4.08    0.00    1.64    7.79    0.00   86.49
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       193710.00       523.89         0.00         0.00        523          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.63    0.00    1.37   10.04    0.00   84.96
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       199060.00       539.14         0.00         0.00        539          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.58    0.00    1.54   10.77    0.00   84.12
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       201614.00       545.97         0.00         0.00        545          0          0
+sda               3.00         0.00         0.01         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.41    0.00    1.50   10.81    0.00   84.28
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       201728.00       546.07         0.00         0.00        546          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.55    0.00    1.18   10.81    0.00   84.46
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       201776.00       546.55         0.00         0.00        546          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           4.16    0.00    1.56   10.13    0.00   84.15
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       197422.00       534.40         0.00         0.00        534          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           4.16    0.00    1.45    8.93    0.00   85.47
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       195925.00       530.37         0.00         0.00        530          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.86    0.00    1.43    8.57    0.00   86.14
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       201125.00       544.50         0.00         0.00        544          0          0
+sda               3.00         0.00         0.01         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.46    0.00    1.37    9.58    0.00   85.59
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              1.00         0.00         0.02         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       201269.00       544.59         0.00         0.00        544          0          0
+sda               1.00         0.00         0.02         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.76    0.00    1.53   10.33    0.00   84.38
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       201544.00       545.73         0.00         0.00        545          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.83    0.00    1.35   10.72    0.00   84.11
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       201537.00       545.99         0.00         0.00        545          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.58    0.00    1.56   10.67    0.00   84.19
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              3.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       200200.00       541.88         0.00         0.00        541          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           4.06    0.00    1.49   10.34    0.00   84.11
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       199422.00       540.21         0.00         0.00        540          0          0
+sda               3.00         0.00         0.02         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.70    0.00    1.43    9.40    0.00   85.46
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       200691.00       543.92         0.00         0.00        543          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.78    0.00    1.51    9.35    0.00   85.35
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       200210.00       542.34         0.00         0.00        542          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.78    0.00    1.70    9.24    0.00   85.28
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       198562.00       537.55         0.00         0.00        537          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.78    0.00    1.58    9.29    0.00   85.35
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       199169.00       539.30         0.00         0.00        539          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.78    0.00    1.66    8.85    0.00   85.71
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       197207.00       534.17         0.00         0.00        534          0          0
+sda               3.00         0.00         0.01         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           4.25    0.00    1.37    9.21    0.00   85.17
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              5.00         0.00         0.05         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       196379.00       531.31         0.00         0.00        531          0          0
+sda               5.00         0.00         0.05         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.81    0.00    1.49    9.24    0.00   85.46
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       197791.00       535.47         0.00         0.00        535          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.68    0.00    1.70    9.25    0.00   85.37
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       198291.00       537.21         0.00         0.00        537          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.93    0.00    1.45    9.32    0.00   85.30
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              4.00         0.00         0.02         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       199201.00       539.79         0.00         0.00        539          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.64    0.00    1.33    9.50    0.00   85.53
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       202046.00       546.97         0.00         0.00        546          0          0
+sda               3.00         0.00         0.02         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.97    0.00    1.45    8.88    0.00   85.70
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       198754.00       538.16         0.00         0.00        538          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           4.14    0.00    1.39    8.19    0.00   86.28
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       197898.00       535.78         0.00         0.00        535          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.55    0.00    1.35    9.54    0.00   85.57
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       200970.00       544.10         0.00         0.00        544          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.68    0.00    1.41   10.71    0.00   84.19
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       201110.00       544.93         0.00         0.00        544          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.85    0.00    1.28   10.84    0.00   84.03
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       202283.00       547.82         0.00         0.00        547          0          0
+sda               3.00         0.00         0.01         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.58    0.00    1.29   10.89    0.00   84.24
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       202763.00       548.81         0.00         0.00        548          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.58    0.00    1.43   10.63    0.00   84.36
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       202011.00       546.81         0.00         0.00        546          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           4.24    0.00    1.35    9.30    0.00   85.11
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       196585.00       532.12         0.00         0.00        532          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           4.05    0.00    1.37    9.35    0.00   85.23
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       199020.00       538.80         0.00         0.00        538          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.83    0.00    1.24    9.45    0.00   85.47
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       199833.00       540.73         0.00         0.00        540          0          0
+sda               3.00         0.00         0.01         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.79    0.00    1.24    9.42    0.00   85.54
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       199479.00       539.96         0.00         0.00        539          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.99    0.00    1.37    9.39    0.00   85.26
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       199647.00       540.89         0.00         0.00        540          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.79    0.00    1.20    9.99    0.00   85.01
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       200124.00       541.77         0.00         0.00        541          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.72    0.00    1.43   10.74    0.00   84.10
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       201392.00       545.54         0.00         0.00        545          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.82    0.00    1.48    9.68    0.00   85.02
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       197411.00       535.28         0.00         0.00        535          0          0
+sda               3.00         0.00         0.01         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.63    0.00    1.60    9.17    0.00   85.60
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       195181.00       527.80         0.00         0.00        527          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.95    0.00    1.68    9.13    0.00   85.24
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              1.00         0.00         0.02         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       195635.00       529.64         0.00         0.00        529          0          0
+sda               1.00         0.00         0.02         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.99    0.00    1.58    9.14    0.00   85.29
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       195557.00       529.84         0.00         0.00        529          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.70    0.00    1.79    9.15    0.00   85.36
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              3.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       195499.00       529.77         0.00         0.00        529          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           4.15    0.00    1.35    8.27    0.00   86.24
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       194736.00       527.21         0.00         0.00        527          0          0
+sda               3.00         0.00         0.02         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           4.21    0.00    1.50    7.84    0.00   86.45
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       193604.00       524.10         0.00         0.00        524          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           4.00    0.00    1.66    7.96    0.00   86.38
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       198738.00       538.26         0.00         0.00        538          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.93    0.00    1.60    9.12    0.00   85.35
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       195313.00       528.66         0.00         0.00        528          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.85    0.00    1.77    9.12    0.00   85.27
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              3.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       195805.00       530.14         0.00         0.00        530          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.89    0.00    1.39   10.43    0.00   84.30
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       200144.00       542.16         0.00         0.00        542          0          0
+sda               3.00         0.00         0.02         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.57    0.00    1.27   10.75    0.00   84.42
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       201382.00       545.52         0.00         0.00        545          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.82    0.00    1.45   10.67    0.00   84.05
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.04         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       200812.00       543.98         0.00         0.00        543          0          0
+sda               1.00         0.00         0.04         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           4.07    0.00    1.51   10.62    0.00   83.79
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       199494.00       539.88         0.00         0.00        539          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.64    0.00    1.51   10.71    0.00   84.14
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       200927.00       544.23         0.00         0.00        544          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.79    0.00    1.41   10.70    0.00   84.10
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              6.00         0.00         0.02         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       201315.00       544.86         0.00         0.00        544          0          0
+sda               3.00         0.00         0.02         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.85    0.00    1.28   10.71    0.00   84.15
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       200984.00       544.01         0.00         0.00        544          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.58    0.00    1.43   10.72    0.00   84.26
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              3.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       200849.00       543.91         0.00         0.00        543          0          0
+sda               3.00         0.00         0.01         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.83    0.00    1.33   10.63    0.00   84.21
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       199955.00       541.85         0.00         0.00        541          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           4.99    0.00    1.53   10.12    0.00   83.36
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       194723.00       527.27         0.00         0.00        527          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.82    0.00    1.58    9.33    0.00   85.28
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       199353.00       539.73         0.00         0.00        539          0          0
+sda               3.00         0.00         0.01         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.59    0.00    1.66    9.37    0.00   85.37
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       200748.00       543.77         0.00         0.00        543          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.56    0.00    1.58    9.33    0.00   85.53
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       199607.00       540.93         0.00         0.00        540          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.96    0.00    1.61    9.27    0.00   85.15
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       199229.00       539.73         0.00         0.00        539          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.81    0.00    1.53    9.61    0.00   85.05
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       198846.00       538.25         0.00         0.00        538          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           4.84    0.00    1.30   10.46    0.00   83.40
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       196126.00       531.32         0.00         0.00        531          0          0
+sda               3.00         0.00         0.01         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.95    0.00    1.74    9.40    0.00   84.91
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       195624.00       529.77         0.00         0.00        529          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.87    0.00    1.51    9.27    0.00   85.34
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       197369.00       534.66         0.00         0.00        534          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.95    0.00    1.47    9.83    0.00   84.76
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       199256.00       539.93         0.00         0.00        539          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.46    0.00    1.41   10.85    0.00   84.28
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       201942.00       546.99         0.00         0.00        546          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.78    0.00    1.37   10.36    0.00   84.49
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       201218.00       545.00         0.00         0.00        544          0          0
+sda               3.00         0.00         0.01         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.59    0.00    1.39    7.48    0.00   87.54
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       197309.00       534.61         0.00         0.00        534          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           4.33    0.00    1.41    9.15    0.00   85.11
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       194578.00       526.96         0.00         0.00        526          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.71    0.00    1.43    8.68    0.00   86.19
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              1.00         0.00         0.02         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       198925.00       538.30         0.00         0.00        538          0          0
+sda               1.00         0.00         0.02         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.76    0.00    1.43    8.13    0.00   86.68
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              3.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       201800.00       546.33         0.00         0.00        546          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.44    0.00    1.31    8.17    0.00   87.09
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       201471.00       545.14         0.00         0.00        545          0          0
+sda               3.00         0.00         0.02         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.58    0.00    1.33    8.20    0.00   86.89
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       201284.00       545.15         0.00         0.00        545          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.52    0.00    1.16    9.54    0.00   85.77
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       202038.00       546.61         0.00         0.00        546          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           4.48    0.00    1.33    8.99    0.00   85.20
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       197096.00       534.09         0.00         0.00        534          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.60    0.00    1.31    8.83    0.00   86.27
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              3.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       201591.00       545.51         0.00         0.00        545          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.72    0.00    1.30    9.47    0.00   85.50
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.01         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       201594.00       546.25         0.00         0.00        546          0          0
+sda               3.00         0.00         0.02         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.75    0.00    1.26   10.84    0.00   84.15
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       202283.00       547.67         0.00         0.00        547          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.57    0.00    1.13    9.76    0.00   85.53
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              0.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       184883.00       500.59         0.00         0.00        500          0          0
+sda               0.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           2.12    0.00    0.78    6.02    0.00   91.09
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              3.00         0.00         0.04         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       121034.00       327.80         0.00         0.00        327          0          0
+sda               1.00         0.00         0.04         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           0.65    0.00    0.46    1.63    0.00   97.27
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0             62.00         0.88         0.05         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1       33492.00        90.63         0.00         0.00         90          0          0
+sda              51.00         0.88         0.04         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           0.00    0.00    0.00    0.00    0.00  100.00
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+dm-0              2.00         0.00         0.00         0.00          0          0          0
+dm-1              0.00         0.00         0.00         0.00          0          0          0
+loop0             0.00         0.00         0.00         0.00          0          0          0
+loop1             0.00         0.00         0.00         0.00          0          0          0
+loop2             0.00         0.00         0.00         0.00          0          0          0
+loop3             0.00         0.00         0.00         0.00          0          0          0
+nvme0n1           0.00         0.00         0.00         0.00          0          0          0
+sda               3.00         0.00         0.00         0.00          0          0          0
+sdb               0.00         0.00         0.00         0.00          0          0          0
+
+

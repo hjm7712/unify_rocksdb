@@ -1612,7 +1612,8 @@ Status BlockBasedTable::MaybeReadBlockAndLoadToCache(
 		// already in unify_contents
 		int index = gettid() % NUM_THREADS;
 		if(NUM_THREADS > 0 && t_id[index] == gettid()
-				&& handle.offset() + handle.size() / 2 == unify_handle_offset[index]){
+				&& handle.offset() + handle.size() / 2 == unify_handle_offset[index]
+				&& block_type == BlockType::kIndex){
 			unify_get.fetch_add(1);
 			assert(block_type == BlockType::kIndex);
 //			printf("%d %d %d %lu\n", index, gettid(), NUM_THREADS, unify_size[index]);
@@ -2150,6 +2151,7 @@ Status BlockBasedTable::RetrieveBlock(
   const bool maybe_compressed =
       block_type != BlockType::kFilter &&
       block_type != BlockType::kCompressionDictionary &&
+	  block_type != BlockType::kUnify &&
       rep_->blocks_maybe_compressed;
   const bool do_uncompress = maybe_compressed;
   std::unique_ptr<TBlocklike> block;

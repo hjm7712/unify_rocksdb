@@ -93,11 +93,11 @@ class IndexBuilder {
   }
 
   // BIG SSD
-  inline Status Finish_Unify(IndexBlocks* index_blocks, Slice* index_data) {
+  inline Status Finish_Unify(IndexBlocks* index_blocks, Slice* index_data, size_t top_level_index_size) {
 	  // Throw away the changes to last_partition_block_handle. It has no effect
 	  // on the first call to Finish anyway.
 	  BlockHandle last_partition_block_handle;
-	  return Finish_Unify(index_blocks, last_partition_block_handle, index_data);
+	  return Finish_Unify(index_blocks, last_partition_block_handle, index_data, top_level_index_size);
   }
 
 
@@ -117,7 +117,8 @@ class IndexBuilder {
 
   // BIG SSD
   virtual Status Finish_Unify(IndexBlocks* index_blocks,
-                        const BlockHandle& last_partition_block_handle, Slice* index_data) = 0;
+                        const BlockHandle& last_partition_block_handle, Slice* index_data,
+						size_t top_level_index_size) = 0;
 
 
 
@@ -241,7 +242,8 @@ class ShortenedIndexBuilder : public IndexBuilder {
   virtual Status Finish_Unify(
 		  IndexBlocks* /*index_blocks*/,
 		  const BlockHandle& /*last_partition_block_handle*/,
-		  Slice* /*index_data*/) override { return Status::OK(); }
+		  Slice* /*index_data*/,
+		  size_t /*top_level_index_size*/) override { return Status::OK(); }
 
   void Finish_Unify(
 		  IndexBlocks* index_blocks) { 
@@ -377,7 +379,8 @@ class HashIndexBuilder : public IndexBuilder {
   virtual Status Finish_Unify(
 		  IndexBlocks* /*index_blocks*/,
 		  const BlockHandle& /*last_partition_block_handle*/,
-		  Slice* /*index_data*/) override { return Status::OK(); }
+		  Slice* /*index_data*/,
+		  size_t /*top_level_index_size*/) override { return Status::OK(); }
 
 
   virtual size_t IndexSize() const override {
@@ -460,7 +463,8 @@ class PartitionedIndexBuilder : public IndexBuilder {
   virtual Status Finish_Unify(
       IndexBlocks* index_blocks,
       const BlockHandle& /*last_partition_block_handle*/,
-	  Slice* index_data) override;
+	  Slice* index_data,
+	  size_t top_level_index_size) override;
 
   virtual size_t IndexSize() const override { return index_size_; }
   size_t TopLevelIndexSize(uint64_t) const { return top_level_index_size_; }

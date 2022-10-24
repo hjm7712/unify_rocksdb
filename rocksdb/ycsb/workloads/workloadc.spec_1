@@ -8,7 +8,8 @@
 
 #recordcount=200000000
 #operationcount=200000000
-recordcount=1600000000
+#recordcount=1600000000
+recordcount=160000000
 #operationcount=16000000
 operationcount=400000
 #operationcount=64000000

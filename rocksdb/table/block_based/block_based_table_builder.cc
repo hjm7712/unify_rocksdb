@@ -1055,7 +1055,6 @@ void BlockBasedTableBuilder::Add_Unify(const Slice& key, const Slice& value) {
 		r->first_key_in_next_block = &key;
 		Flush();
 		if (r->state == Rep::State::kBuffered) {
-			printf("hihi\n");
 			bool exceeds_buffer_limit =
 				(r->buffer_limit != 0 && r->data_begin_offset > r->buffer_limit);
 			bool exceeds_global_block_cache_limit = false;
@@ -1889,6 +1888,9 @@ void BlockBasedTableBuilder::WriteUnifyBlock(
       // transferred filter data payload among different FilterBlockBuilder
       // subtypes.
       std::unique_ptr<const char[]> filter_data;
+
+	  size_t top_level_index_size = 0;
+
       Slice filter_content =
           rep_->filter_builder->Finish(*unify_block_handle, &s, &filter_data);
 
@@ -1900,7 +1902,6 @@ void BlockBasedTableBuilder::WriteUnifyBlock(
 
 	  // Unify block props will be added
 	  // rep_->props.unify_size += (filter_content.size() + index_content.size());
-      rep_->props.filter_size += filter_content.size();
 
       // TODO: Refactor code so that BlockType can determine both the C++ type
       // of a block cache entry (TBlocklike) and the CacheEntryRole while
@@ -1908,13 +1909,18 @@ void BlockBasedTableBuilder::WriteUnifyBlock(
       bool top_level_filter_block = false;
       if (s.ok() && rep_->table_options.partition_filters &&
           !rep_->filter_builder->IsBlockBased()) {
+		top_level_index_size = filter_content.size();
         top_level_filter_block = true;
       }
+
+	  if(top_level_filter_block == false){
+		  rep_->props.filter_size += filter_content.size();
+	  }
 
 //	  char filter_size[sizeof(uint64_t)];
 	
 	  Slice index_content;
-	  auto i_s = rep_->index_builder->Finish_Unify(&index_blocks, &index_content);
+	  auto i_s = rep_->index_builder->Finish_Unify(&index_blocks, &index_content, top_level_index_size);
 
 //	  char* tmp_index = new char[index_content.size()];
 //	  memcpy(tmp_index, index_content.data(), sizeof(char)*index_content.size());
